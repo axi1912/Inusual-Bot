@@ -784,8 +784,17 @@ async function handleBoostSelection(interaction) {
         .setDescription(`**${selectedOption.label}**\n\n💰 **Price:** ${selectedOption.price}\n📦 **Quantity:** ${selectedOption.quantity} boosts\n⏰ **Duration:** ${selectedOption.duration}\n\n📝 A staff member will process your order soon.`)
         .setTimestamp();
 
+    // Botón para cerrar ticket
+    const closeButton = new ActionRowBuilder()
+        .addComponents(
+            new ButtonBuilder()
+                .setCustomId('close_ticket')
+                .setLabel('🔒 Cerrar Ticket')
+                .setStyle(ButtonStyle.Danger)
+        );
+
     // Responder a la interacción
-    await interaction.reply({ embeds: [ticketInfoEmbed, packageEmbed] });
+    await interaction.reply({ embeds: [ticketInfoEmbed, packageEmbed], components: [closeButton] });
 
     // Notificar al staff en canal de logs (si está configurado)
     if (process.env.STAFF_LOG_CHANNEL_ID) {
@@ -848,8 +857,17 @@ async function handleBotSelection(interaction) {
         .setDescription(`**${selectedOption.type}**\n\n💰 **Price:** ${selectedOption.price}\n\n📝 A staff member will contact you soon to discuss your custom bot details.\n\n**Next Steps:**\n• Describe what features you need\n• Share any references or examples\n• Wait for final quote`)
         .setTimestamp();
 
+    // Botón para cerrar ticket
+    const closeButton = new ActionRowBuilder()
+        .addComponents(
+            new ButtonBuilder()
+                .setCustomId('close_ticket')
+                .setLabel('🔒 Cerrar Ticket')
+                .setStyle(ButtonStyle.Danger)
+        );
+
     // Responder a la interacción
-    await interaction.reply({ embeds: [ticketInfoEmbed, botEmbed] });
+    await interaction.reply({ embeds: [ticketInfoEmbed, botEmbed], components: [closeButton] });
 
     // Notificar al staff en canal de logs
     if (process.env.STAFF_LOG_CHANNEL_ID) {
