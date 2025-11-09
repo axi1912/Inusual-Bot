@@ -1,0 +1,98 @@
+{
+  "boostOptions": [
+    {
+      "label": "6 Server Boosts - 1 Mes (5$)",
+      "value": "6_boosts_1month",
+      "description": "1 Mes - 5$",
+      "price": "5$",
+      "quantity": 6,
+      "duration": "1 Mes"
+    },
+    {
+      "label": "8 Server Boosts - 1 Mes (7$)",
+      "value": "8_boosts_1month",
+      "description": "1 Mes - 7$",
+      "price": "7$",
+      "quantity": 8,
+      "duration": "1 Mes"
+    },
+    {
+      "label": "14 Server Boosts - 1 Mes (11$)",
+      "value": "14_boosts_1month",
+      "description": "1 Mes - 11$",
+      "price": "11$",
+      "quantity": 14,
+      "duration": "1 Mes"
+    },
+    {
+      "label": "6 Server Boosts - 3 Meses (15$)",
+      "value": "6_boosts_3months",
+      "description": "3 Meses - 15$",
+      "price": "15$",
+      "quantity": 6,
+      "duration": "3 Meses"
+    },
+    {
+      "label": "8 Server Boosts - 3 Meses (20$)",
+      "value": "8_boosts_3months",
+      "description": "3 Meses - 20$",
+      "price": "20$",
+      "quantity": 8,
+      "duration": "3 Meses"
+    },
+    {
+      "label": "14 Server Boosts - 3 Meses (35$)",
+      "value": "14_boosts_3months",
+      "description": "3 Meses - 35$",
+      "price": "35$",
+      "quantity": 14,
+      "duration": "3 Meses"
+    }
+  ],
+  "botOptions": [
+    {
+      "label": "Basic Bot - Starting at 15$",
+      "value": "basic_bot",
+      "description": "Simple functionality bot",
+      "price": "Starting at 15$",
+      "type": "Basic Bot"
+    },
+    {
+      "label": "Advanced Bot - Starting at 30$",
+      "value": "advanced_bot",
+      "description": "Multiple features & systems",
+      "price": "Starting at 30$",
+      "type": "Advanced Bot"
+    },
+    {
+      "label": "Premium Bot - Starting at 50$",
+      "value": "premium_bot",
+      "description": "Complex custom bot",
+      "price": "Starting at 50$",
+      "type": "Premium Bot"
+    },
+    {
+      "label": "Custom Quote - Contact us",
+      "value": "custom_quote",
+      "description": "Unique project - Custom pricing",
+      "price": "Custom Quote",
+      "type": "Custom Project"
+    }
+  ],
+  "colors": {
+    "primary": "#00D9A3",
+    "success": "#2ECC71",
+    "info": "#3498DB",
+    "warning": "#F39C12"
+  },
+  "welcome": {
+    "enabled": true,
+    "channelId": "1436830526291054592",
+    "title": "🎉 WELCOME TO INUSUAL BOOSTING! 🎉",
+    "description": "**Hey {user}!** 👋\n\nWe're glad to have you here!\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+    "color": "#00D9A3",
+    "image": "https://cdn.discordapp.com/attachments/1309783318031503384/1436578775121920100/fau_get_2.gif",
+    "thumbnail": null,
+    "footer": "👑 Inusual Boosting • Member #{memberCount}"
+  }
+}
