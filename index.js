@@ -914,7 +914,7 @@ async function closeTicketButton(interaction) {
                 .setStyle(ButtonStyle.Secondary)
         );
 
-    await interaction.reply({ embeds: [confirmEmbed],  ephemeral: true });
+    await interaction.reply({ embeds: [confirmEmbed], components: [row], ephemeral: true });
 }
 
 // Confirmar cierre de ticket
