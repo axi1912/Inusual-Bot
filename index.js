@@ -247,7 +247,7 @@ async function setupBotsPanel(channel) {
         .setColor('#00D9A3')
         .setTitle('🤖 CUSTOM DISCORD BOTS')
         .setDescription('━━━━━━━━━━━━━━━━━━━━━━━━━')
-        .setThumbnail('https://cdn.discordapp.com/attachments/1309783318031503384/1436578775121920100/fau_get_2.gif')
+        .setThumbnail('https://cdn.discordapp.com/attachments/1309783318031503384/1438385570437922946/Factory_animated_logo.gif?ex=6916b073&is=69155ef3&hm=f1ac14dc01c64be29c1efd40ccb4c29147260e3cb476963f3e6f5b2bc96a6679&')
         .addFields(
             {
                 name: '\n📋 ABOUT\n',
@@ -300,7 +300,7 @@ async function handleEmbedCommand(interaction) {
                 .setColor('#00D9A3')
                 .setTitle('INUSUAL BOOSTING - SERVER BOOSTS')
                 .setDescription('━━━━━━━━━━━━━━━━━━━━━━━━━')
-                .setThumbnail('https://cdn.discordapp.com/attachments/1309783318031503384/1436578775121920100/fau_get_2.gif')
+                .setThumbnail('https://cdn.discordapp.com/attachments/1309783318031503384/1438385570437922946/Factory_animated_logo.gif?ex=6916b073&is=69155ef3&hm=f1ac14dc01c64be29c1efd40ccb4c29147260e3cb476963f3e6f5b2bc96a6679&')
                 .addFields(
                     {
                         name: '\n🟢 1 MONTH SERVER BOOSTS\n',
@@ -330,7 +330,7 @@ async function handleEmbedCommand(interaction) {
                 .setColor('#00D9A3')
                 .setTitle('🤖 CUSTOM DISCORD BOTS')
                 .setDescription('━━━━━━━━━━━━━━━━━━━━━━━━━')
-                .setThumbnail('https://cdn.discordapp.com/attachments/1309783318031503384/1436578775121920100/fau_get_2.gif')
+                .setThumbnail('https://cdn.discordapp.com/attachments/1309783318031503384/1438385570437922946/Factory_animated_logo.gif?ex=6916b073&is=69155ef3&hm=f1ac14dc01c64be29c1efd40ccb4c29147260e3cb476963f3e6f5b2bc96a6679&')
                 .addFields(
                     {
                         name: '\n📋 ABOUT\n',
