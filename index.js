@@ -223,7 +223,7 @@ async function setupTicketPanel(channel) {
                 inline: false
             }
         )
-        .setImage('attachment://fau_get_2.gif')
+        .setImage('https://cdn.discordapp.com/attachments/1309783318031503384/1438385544043430030/banner_factory.gif?ex=6916b06d&is=69155eed&hm=cc3d8842a292692983ed0ccf4114f3baf53681b386260983a513862de799d17e&')
         .setFooter({ text: '👑 Factory Boosts • Trusted Service' })
         .setTimestamp();
 
@@ -235,10 +235,7 @@ async function setupTicketPanel(channel) {
                 .setStyle(ButtonStyle.Success)
         );
 
-    // Adjuntar la imagen
-    const imageAttachment = new AttachmentBuilder('C:\\Users\\AXIOMS\\Downloads\\fau_get_2.gif', { name: 'fau_get_2.gif' });
-
-    await channel.send({ embeds: [embed],  files: [imageAttachment] });
+    await channel.send({ embeds: [embed], components: [row] });
 }
 
 // Función para crear el panel de Custom Bots
@@ -275,7 +272,7 @@ async function setupBotsPanel(channel) {
                 inline: false
             }
         )
-        .setFooter({ text: '🤖 Inusual Development • Quality Custom Bots' });
+        .setFooter({ text: '🤖 Factory Development • Quality Custom Bots' });
 
     const row = new ActionRowBuilder()
         .addComponents(
