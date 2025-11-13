@@ -1,7 +1,7 @@
 {
-  "name": "inusual-boosting-bot",
+  "name": "factory-boosts-bot",
   "version": "1.0.0",
-  "description": "Bot de Discord para sistema de tickets de Inusual Boosting",
+  "description": "Bot de Discord para sistema de tickets de Factory Boosts",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",

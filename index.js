@@ -20,7 +20,7 @@ const activeTickets = new Map();
 const commands = [
     {
         name: 'setup',
-        description: 'Configurar el panel de tickets de Inusual Boosting'
+        description: 'Configurar el panel de tickets de Factory Boosts'
     },
     {
         name: 'setup-bots',
@@ -54,7 +54,7 @@ const commands = [
                 type: 3,
                 required: false,
                 choices: [
-                    { name: 'Precios - Inusual Boosting', value: 'precios' },
+                    { name: 'Precios - Factory Boosts', value: 'precios' },
                     { name: 'Custom Bots - Servicios', value: 'custombots' },
                     { name: 'Anuncio Simple', value: 'anuncio' }
                 ]
@@ -101,7 +101,7 @@ const commands = [
 
 client.once('ready', async () => {
     console.log(`✅ Bot conectado como ${client.user.tag}`);
-    console.log(`🚀 Bot listo para gestionar tickets de Inusual Boosting`);
+    console.log(`🚀 Bot listo para gestionar tickets de Factory Boosts`);
     
     // Conectar a MongoDB
     await db.connectDB();
@@ -189,7 +189,7 @@ client.on('guildMemberAdd', async (member) => {
     
     try {
         await welcomeChannel.send({ 
-            content: `🎉 **Welcome <@${member.id}> to Inusual Boosting!** 🌟`,
+            content: `🎉 **Welcome <@${member.id}> to Factory Boosts!** 🌟`,
             embeds: [welcomeEmbed]
         });
         console.log(`✅ Mensaje de bienvenida enviado para ${member.user.tag}`);
@@ -204,7 +204,7 @@ client.on('guildMemberAdd', async (member) => {
 async function setupTicketPanel(channel) {
     const embed = new EmbedBuilder()
         .setColor('#00D9A3')
-        .setTitle('INUSUAL BOOSTING - SERVER BOOSTS')
+        .setTitle('FACTORY BOOSTS - SERVER BOOSTS')
         .setDescription('━━━━━━━━━━━━━━━━━━━━━━━━━')
         .addFields(
             {
@@ -224,7 +224,7 @@ async function setupTicketPanel(channel) {
             }
         )
         .setImage('attachment://fau_get_2.gif')
-        .setFooter({ text: '👑 Inusual Boosting • Trusted Service' })
+        .setFooter({ text: '👑 Factory Boosts • Trusted Service' })
         .setTimestamp();
 
     const row = new ActionRowBuilder()
@@ -298,7 +298,7 @@ async function handleEmbedCommand(interaction) {
         if (preset === 'precios') {
             const embed = new EmbedBuilder()
                 .setColor('#00D9A3')
-                .setTitle('INUSUAL BOOSTING - SERVER BOOSTS')
+                .setTitle('FACTORY BOOSTS - SERVER BOOSTS')
                 .setDescription('━━━━━━━━━━━━━━━━━━━━━━━━━')
                 .setThumbnail('https://cdn.discordapp.com/attachments/1309783318031503384/1438385570437922946/Factory_animated_logo.gif?ex=6916b073&is=69155ef3&hm=f1ac14dc01c64be29c1efd40ccb4c29147260e3cb476963f3e6f5b2bc96a6679&')
                 .addFields(
@@ -318,7 +318,7 @@ async function handleEmbedCommand(interaction) {
                         inline: false
                     }
                 )
-                .setFooter({ text: '👑 Inusual Boosting • Trusted Service' });
+                .setFooter({ text: '👑 Factory Boosts • Trusted Service' });
             
             await canal.send({ embeds: [embed] });
             return interaction.reply({ content: `✅ Mensaje de precios enviado a ${canal}`, ephemeral: true });
@@ -370,7 +370,7 @@ async function handleEmbedCommand(interaction) {
         const color = interaction.options.getString('color') || '#00D9A3';
         const imagen = interaction.options.getString('imagen');
         const thumbnail = interaction.options.getString('thumbnail');
-        const footer = interaction.options.getString('footer') || 'Inusual Boosting';
+        const footer = interaction.options.getString('footer') || 'Factory Boosts';
 
         if (!titulo && !descripcion) {
             return interaction.reply({ 
@@ -567,7 +567,7 @@ client.on('interactionCreate', async (interaction) => {
                             inline: false
                         }
                     )
-                    .setFooter({ text: '💎 Inusual Boosting • Premium Support' })
+                    .setFooter({ text: '💎 Factory Boosts • Premium Support' })
                     .setTimestamp();
                 
                 await interaction.reply({ embeds: [supportEmbed], ephemeral: true });
@@ -700,7 +700,7 @@ async function handleTicketCreation(interaction, type = 'boost') {
         } else {
             welcomeEmbed = new EmbedBuilder()
                 .setColor('#00D9A3')
-                .setTitle('🎫 Ticket Created - Inusual Boosting')
+                .setTitle('🎫 Ticket Created - Factory Boosts')
                 .setDescription(`Hello ${interaction.user}! Thank you for creating a ticket.\n\n**Please select the boost package you want to purchase:**`)
                 .setTimestamp();
 
@@ -775,7 +775,7 @@ async function handleBoostSelection(interaction) {
     const ticketInfoEmbed = new EmbedBuilder()
         .setColor('#00D9A3')
         .setDescription(`🎫 **Ticket ID:** \`${ticketId}\`\n👤 **Ticket Owner:** \`${interaction.user.tag}\`\n⚠️ **Reminder:** \`Do not ping staff repeatedly\``)
-        .setFooter({ text: 'Tickets • Inusual Boosting' });
+        .setFooter({ text: 'Tickets • Factory Boosts' });
 
     // Embed del paquete seleccionado
     const packageEmbed = new EmbedBuilder()
