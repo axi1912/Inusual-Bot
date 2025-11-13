@@ -79,6 +79,22 @@
       "type": "Custom Project"
     }
   ],
+  "nitroOptions": [
+    {
+      "label": "Nitro Token - 1 Month (1.50$)",
+      "value": "nitro_1month",
+      "description": "1 Month - 1.50$",
+      "price": "1.50$",
+      "duration": "1 Month"
+    },
+    {
+      "label": "Nitro Token - 3 Months (4.00$)",
+      "value": "nitro_3months",
+      "description": "3 Months - 4.00$",
+      "price": "4.00$",
+      "duration": "3 Months"
+    }
+  ],
   "colors": {
     "primary": "#00D9A3",
     "success": "#2ECC71",

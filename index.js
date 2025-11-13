@@ -27,6 +27,10 @@ const commands = [
         description: 'Configurar el panel de Custom Bots'
     },
     {
+        name: 'setup-nitro',
+        description: 'Configurar el panel de Nitro Tokens'
+    },
+    {
         name: 'setup-welcome',
         description: 'Configurar el sistema de bienvenida',
         options: [
@@ -285,6 +289,49 @@ async function setupBotsPanel(channel) {
     await channel.send({ embeds: [embed], components: [row] });
 }
 
+// Función para crear el panel de Nitro Tokens
+async function setupNitroPanel(channel) {
+    const embed = new EmbedBuilder()
+        .setColor('#00D9A3')
+        .setTitle('💎 DISCORD NITRO TOKENS')
+        .setDescription('━━━━━━━━━━━━━━━━━━━━━━━━━')
+        .addFields(
+            {
+                name: '\n💜 NITRO PRICING\n',
+                value: '```fix\n• 1 Month Nitro  → 1.50$\n• 3 Months Nitro → 4.00$\n```',
+                inline: false
+            },
+            {
+                name: '\n✨ WHAT YOU GET\n',
+                value: '```\n• Custom Emoji Everywhere\n• HD Video Streaming\n• Server Boosts (2 boosts)\n• Bigger File Uploads (500MB)\n• Custom Profile & Banner\n• HD Avatar & Animated\n```',
+                inline: false
+            },
+            {
+                name: '\n💳 PAYMENT METHODS\n',
+                value: '<:807644paypal:1436584262479384707> **PayPal**\n<:binance:1436591160285073408> **Binance**',
+                inline: false
+            },
+            {
+                name: '\n📋 INSTRUCTIONS\n',
+                value: '» Click the **"Buy Nitro"** button\n» Select the duration you want\n» A staff member will process your order\n» Receive your Nitro Token instantly',
+                inline: false
+            }
+        )
+        .setImage('https://cdn.discordapp.com/attachments/1309783318031503384/1438385544043430030/banner_factory.gif?ex=6916b06d&is=69155eed&hm=cc3d8842a292692983ed0ccf4114f3baf53681b386260983a513862de799d17e&')
+        .setFooter({ text: '💎 Factory Boosts • Instant Delivery' })
+        .setTimestamp();
+
+    const row = new ActionRowBuilder()
+        .addComponents(
+            new ButtonBuilder()
+                .setCustomId('create_ticket_nitro')
+                .setLabel('💎 Buy Nitro')
+                .setStyle(ButtonStyle.Primary)
+        );
+
+    await channel.send({ embeds: [embed], components: [row] });
+}
+
 // Función para crear embeds personalizados
 async function handleEmbedCommand(interaction) {
     try {
@@ -454,6 +501,21 @@ client.on('interactionCreate', async (interaction) => {
                 await interaction.editReply({ content: '✅ Panel de custom bots creado correctamente!' });
             }
             
+            if (interaction.commandName === 'setup-nitro') {
+                // Verificar que sea administrador
+                if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
+                    return interaction.reply({ 
+                        content: '❌ Solo los administradores pueden usar este comando.', 
+                        ephemeral: true 
+                    });
+                }
+                
+                // Responder INMEDIATAMENTE
+                await interaction.reply({ content: '⏳ Creando panel de nitro tokens...', ephemeral: true });
+                await setupNitroPanel(interaction.channel);
+                await interaction.editReply({ content: '✅ Panel de nitro tokens creado correctamente!' });
+            }
+            
             if (interaction.commandName === 'setup-welcome') {
                 // Verificar que sea administrador
                 if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
@@ -512,6 +574,10 @@ client.on('interactionCreate', async (interaction) => {
                 // Responder INMEDIATAMENTE
                 await interaction.reply({ content: '⏳ Creando tu ticket...', ephemeral: true });
                 await handleTicketCreation(interaction, 'bot');
+            } else if (interaction.customId === 'create_ticket_nitro') {
+                // Responder INMEDIATAMENTE
+                await interaction.reply({ content: '⏳ Creando tu ticket...', ephemeral: true });
+                await handleTicketCreation(interaction, 'nitro');
             } else if (interaction.customId === 'close_ticket') {
                 await closeTicketButton(interaction);
             } else if (interaction.customId === 'close_confirm') {
@@ -578,6 +644,8 @@ client.on('interactionCreate', async (interaction) => {
                 await handleBoostSelection(interaction);
             } else if (interaction.customId === 'select_bot_package') {
                 await handleBotSelection(interaction);
+            } else if (interaction.customId === 'select_nitro_package') {
+                await handleNitroSelection(interaction);
             }
             return;
         }
@@ -609,14 +677,24 @@ async function handleTicketCreation(interaction, type = 'boost') {
     }
 
     try {
-        // Determinar la categoría según el tipo de ticket
-        const categoryId = type === 'bot' 
-            ? process.env.BOT_TICKET_CATEGORY_ID 
-            : process.env.TICKET_CATEGORY_ID;
+        // Determinar la categoría y nombre según el tipo de ticket
+        let categoryId;
+        let channelName;
+        
+        if (type === 'nitro') {
+            categoryId = '1438409406604644407'; // Categoría específica para tokens
+            channelName = `tokens-${interaction.user.username}`; // Nombre temporal, se actualizará después
+        } else if (type === 'bot') {
+            categoryId = process.env.BOT_TICKET_CATEGORY_ID;
+            channelName = `purchase-${interaction.user.username}`;
+        } else {
+            categoryId = process.env.TICKET_CATEGORY_ID;
+            channelName = `purchase-${interaction.user.username}`;
+        }
         
         // Crear canal de ticket
         const ticketChannel = await interaction.guild.channels.create({
-            name: `purchase-${interaction.user.username}`,
+            name: channelName,
             type: ChannelType.GuildText,
             parent: categoryId || null,
             permissionOverwrites: [
@@ -664,12 +742,13 @@ async function handleTicketCreation(interaction, type = 'boost') {
 
         // Guardar en base de datos JSON
         const ticketId = Math.floor(Math.random() * 9000) + 1000;
+        const ticketType = type === 'bot' ? 'Custom Bot' : type === 'nitro' ? 'Nitro Token' : 'Boost';
         db.addTicket({
             id: ticketId,
             channelId: ticketChannel.id,
             userId: interaction.user.id,
             username: interaction.user.tag,
-            type: type === 'bot' ? 'Custom Bot' : 'Boost',
+            type: ticketType,
             status: 'open',
             createdAt: new Date().toISOString()
         });
@@ -677,7 +756,24 @@ async function handleTicketCreation(interaction, type = 'boost') {
         // Embed y menú según el tipo de ticket
         let welcomeEmbed, selectMenu;
         
-        if (type === 'bot') {
+        if (type === 'nitro') {
+            welcomeEmbed = new EmbedBuilder()
+                .setColor('#5865F2')
+                .setTitle('🎫 Ticket Created - Nitro Token')
+                .setDescription(`Hello ${interaction.user}! Thank you for creating a ticket.\n\n**Please select the Nitro duration you want:**`)
+                .setTimestamp();
+
+            selectMenu = new StringSelectMenuBuilder()
+                .setCustomId('select_nitro_package')
+                .setPlaceholder('Select Nitro duration')
+                .addOptions(
+                    config.nitroOptions.map(option => ({
+                        label: option.label,
+                        description: option.description,
+                        value: option.value
+                    }))
+                );
+        } else if (type === 'bot') {
             welcomeEmbed = new EmbedBuilder()
                 .setColor('#00D9A3')
                 .setTitle('🎫 Ticket Created - Custom Bot')
@@ -861,6 +957,80 @@ async function handleBotSelection(interaction) {
                     { name: '👤 User', value: `${interaction.user} (${interaction.user.tag})`, inline: true },
                     { name: '🤖 Type', value: selectedOption.type, inline: true },
                     { name: '💰 Price', value: selectedOption.price, inline: true },
+                    { name: '🎫 Ticket Channel', value: `${interaction.channel}`, inline: false }
+                )
+                .setThumbnail(interaction.user.displayAvatarURL())
+                .setFooter({ text: `User ID: ${interaction.user.id}` })
+                .setTimestamp();
+
+            await logChannel.send({ embeds: [staffNotification] });
+        } catch (error) {
+            console.error('Error al enviar notificación al canal de logs:', error);
+        }
+    }
+}
+
+// Manejar selección de nitro
+async function handleNitroSelection(interaction) {
+    const selectedOption = config.nitroOptions.find(opt => opt.value === interaction.values[0]);
+    
+    if (!selectedOption) {
+        return interaction.reply({ content: '❌ Opción no válida.', ephemeral: true });
+    }
+
+    // Cambiar el nombre del canal según la duración seleccionada
+    const duration = selectedOption.value === 'nitro_1month' ? '1' : '3';
+    const newChannelName = `tokens${duration}-${interaction.user.username}`;
+    
+    try {
+        await interaction.channel.setName(newChannelName);
+    } catch (error) {
+        console.error('Error al renombrar canal:', error);
+    }
+
+    // Buscar ticket en DB por channelId y actualizar detalles
+    const ticket = db.getTicketByChannelId(interaction.channel.id);
+    if (ticket) {
+        db.updateTicketDetails(ticket.id, {
+            package: selectedOption.label,
+            price: selectedOption.price,
+            duration: selectedOption.duration
+        });
+    }
+
+    // Generar ID único del ticket (usar el del DB si existe)
+    const ticketId = ticket ? ticket.id : Math.floor(Math.random() * 9000) + 1000;
+    
+    // Embed de información del ticket
+    const ticketInfoEmbed = new EmbedBuilder()
+        .setColor('#5865F2')
+        .setDescription(`🎫 **Ticket ID:** \`${ticketId}\`\n👤 **Ticket Owner:** \`${interaction.user.tag}\`\n⚠️ **Reminder:** \`Do not ping staff repeatedly\``)
+        .setFooter({ text: 'Tickets • Factory Boosts' });
+
+    // Embed del nitro seleccionado
+    const nitroEmbed = new EmbedBuilder()
+        .setColor('#5865F2')
+        .setTitle('✅ Nitro Package Selected')
+        .setDescription(`**${selectedOption.label}**\n\n💰 **Price:** ${selectedOption.price}\n⏰ **Duration:** ${selectedOption.duration}\n\n📝 A staff member will send you the Nitro Token shortly.\n\n**After Payment:**\n• Receive your Nitro Token\n• Redeem on Discord\n• Enjoy Nitro benefits instantly!`)
+        .setTimestamp();
+
+    // Responder a la interacción
+    await interaction.reply({ embeds: [ticketInfoEmbed, nitroEmbed] });
+
+    // Notificar al staff en canal de logs
+    if (process.env.STAFF_LOG_CHANNEL_ID) {
+        try {
+            const logChannel = await interaction.guild.channels.fetch(process.env.STAFF_LOG_CHANNEL_ID);
+            
+            const staffNotification = new EmbedBuilder()
+                .setColor('#5865F2')
+                .setTitle('💎 New Nitro Token Request')
+                .setDescription(`A customer has requested a Nitro Token`)
+                .addFields(
+                    { name: '👤 User', value: `${interaction.user} (${interaction.user.tag})`, inline: true },
+                    { name: '💎 Package', value: selectedOption.label, inline: true },
+                    { name: '💰 Price', value: selectedOption.price, inline: true },
+                    { name: '⏰ Duration', value: selectedOption.duration, inline: true },
                     { name: '🎫 Ticket Channel', value: `${interaction.channel}`, inline: false }
                 )
                 .setThumbnail(interaction.user.displayAvatarURL())
