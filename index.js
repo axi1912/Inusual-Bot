@@ -271,7 +271,7 @@ async function setupBotsPanel(channel) {
                 inline: false
             }
         )
-        .setImage('https://cdn.discordapp.com/attachments/1309783318031503384/1438385544215265282/banner_factory.gif')
+        .setImage('https://cdn.discordapp.com/attachments/1309783318031503384/1438385544043430030/banner_factory.gif?ex=6916b06d&is=69155eed&hm=cc3d8842a292692983ed0ccf4114f3baf53681b386260983a513862de799d17e&')
         .setFooter({ text: '🤖 Factory Development • Quality Custom Bots' });
 
     const row = new ActionRowBuilder()
@@ -314,7 +314,7 @@ async function handleEmbedCommand(interaction) {
                         inline: false
                     }
                 )
-                .setImage('https://cdn.discordapp.com/attachments/1309783318031503384/1438385544215265282/banner_factory.gif')
+                .setImage('https://cdn.discordapp.com/attachments/1309783318031503384/1438385544043430030/banner_factory.gif?ex=6916b06d&is=69155eed&hm=cc3d8842a292692983ed0ccf4114f3baf53681b386260983a513862de799d17e&')
                 .setFooter({ text: '👑 Factory Boosts • Trusted Service' });
             
             await canal.send({ embeds: [embed] });
@@ -354,7 +354,7 @@ async function handleEmbedCommand(interaction) {
                         inline: false
                     }
                 )
-                .setImage('https://cdn.discordapp.com/attachments/1309783318031503384/1438385544215265282/banner_factory.gif')
+                .setImage('https://cdn.discordapp.com/attachments/1309783318031503384/1438385544043430030/banner_factory.gif?ex=6916b06d&is=69155eed&hm=cc3d8842a292692983ed0ccf4114f3baf53681b386260983a513862de799d17e&')
                 .setFooter({ text: '🤖 Factory Development • Quality Custom Bots' });
             
             await canal.send({ embeds: [embed] });
