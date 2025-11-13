@@ -302,11 +302,6 @@ async function setupNitroPanel(channel) {
                 inline: false
             },
             {
-                name: '\n✨ WHAT YOU GET\n',
-                value: '```\n• Custom Emoji Everywhere\n• HD Video Streaming\n• Server Boosts (2 boosts)\n• Bigger File Uploads (500MB)\n• Custom Profile & Banner\n• HD Avatar & Animated\n```',
-                inline: false
-            },
-            {
                 name: '\n💳 PAYMENT METHODS\n',
                 value: '<:807644paypal:1436584262479384707> **PayPal**\n<:binance:1436591160285073408> **Binance**',
                 inline: false
@@ -1011,7 +1006,7 @@ async function handleNitroSelection(interaction) {
     const nitroEmbed = new EmbedBuilder()
         .setColor('#5865F2')
         .setTitle('✅ Nitro Package Selected')
-        .setDescription(`**${selectedOption.label}**\n\n💰 **Price:** ${selectedOption.price}\n⏰ **Duration:** ${selectedOption.duration}\n\n📝 A staff member will send you the Nitro Token shortly.\n\n**After Payment:**\n• Receive your Nitro Token\n• Redeem on Discord\n• Enjoy Nitro benefits instantly!`)
+        .setDescription(`**${selectedOption.label}**\n\n💰 **Price:** ${selectedOption.price}\n⏰ **Duration:** ${selectedOption.duration}\n\n📝 A staff member will send you the Nitro Token shortly.\n\n**After Payment:**\n• Receive your Nitro Token\n• Check it in your tool\n• They are ready to use!`)
         .setTimestamp();
 
     // Responder a la interacción
