@@ -836,7 +836,7 @@ async function handleBotSelection(interaction) {
     const ticketInfoEmbed = new EmbedBuilder()
         .setColor('#00D9A3')
         .setDescription(`🎫 **Ticket ID:** \`${ticketId}\`\n👤 **Ticket Owner:** \`${interaction.user.tag}\`\n⚠️ **Reminder:** \`Do not ping staff repeatedly\``)
-        .setFooter({ text: 'Tickets • Inusual Development' });
+        .setFooter({ text: 'Tickets • Factory Development' });
 
     // Embed del bot seleccionado
     const botEmbed = new EmbedBuilder()
