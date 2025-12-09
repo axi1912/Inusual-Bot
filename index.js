@@ -384,45 +384,45 @@ async function handleEmbedCommand(interaction) {
             const embed = new EmbedBuilder()
                 .setColor('#00D9A3')
                 .setTitle('❓ FREQUENTLY ASKED QUESTIONS')
-                .setDescription('━━━━━━━━━━━━━━━━━━━━━━━━━\n**Everything you need to know about Factory Boosts**')
+                .setDescription('**Everything you need to know about Factory Boosts**\n\u200B')
                 .addFields(
                     {
-                        name: '🚀 What are Server Boosts?',
-                        value: 'Server Boosts unlock premium features for your Discord server like better audio quality, custom server banner, more emoji slots, and increased upload limit.',
+                        name: '\n🚀 What are Server Boosts?\n',
+                        value: 'Server Boosts unlock premium features for your Discord server:\n```\n• Better audio quality\n• Custom server banner\n• More emoji slots\n• Increased upload limit\n```',
                         inline: false
                     },
                     {
-                        name: '⏱️ How long do boosts last?',
-                        value: 'We offer boosts in **1 month** and **3 months** duration. The boost timer starts immediately after activation.',
+                        name: '\n⏱️ How long do boosts last?\n',
+                        value: 'We offer boosts in **1 month** and **3 months** duration.\nThe boost timer starts immediately after activation.\n\u200B',
                         inline: false
                     },
                     {
-                        name: '💳 What payment methods do you accept?',
-                        value: 'We accept **PayPal** and **Binance** (crypto). All payments are secure and processed instantly.',
+                        name: '\n💳 What payment methods do you accept?\n',
+                        value: 'We accept **PayPal** and **Binance** (crypto).\nAll payments are secure and processed instantly.\n\u200B',
                         inline: false
                     },
                     {
-                        name: '📦 How do I receive my boosts?',
-                        value: 'After payment confirmation:\n• You provide your server invite\n• Our team activates the boosts\n• Delivery time: **5-15 minutes**',
+                        name: '\n📦 How do I receive my boosts?\n',
+                        value: '**After payment confirmation:**\n```\n1. You provide your server invite\n2. Our team activates the boosts\n3. Delivery time: 5-15 minutes\n```',
                         inline: false
                     },
                     {
-                        name: '🔒 Are the boosts safe?',
-                        value: 'Yes! All our boosts are **100% legitimate** and comply with Discord Terms of Service. Your server is completely safe.',
+                        name: '\n🔒 Are the boosts safe?\n',
+                        value: 'Yes! All our boosts are **100% legitimate** and comply with Discord Terms of Service.\nYour server is completely safe.\n\u200B',
                         inline: false
                     },
                     {
-                        name: '🔄 What if a boost drops?',
-                        value: 'If any boost drops during the purchased period, we will **replace it for free** within 24 hours. We guarantee full coverage.',
+                        name: '\n🔄 What if a boost drops?\n',
+                        value: 'If any boost drops during the purchased period, we will **replace it for free** within 24 hours.\nWe guarantee full coverage.\n\u200B',
                         inline: false
                     },
                     {
-                        name: '💬 How do I place an order?',
-                        value: 'Simply click the **"Start Purchase"** button in our tickets channel, select your package, and our staff will assist you immediately.',
+                        name: '\n💬 How do I place an order?\n',
+                        value: 'Simply click the **"Start Purchase"** button in our tickets channel, select your package, and our staff will assist you immediately.\n\u200B',
                         inline: false
                     },
                     {
-                        name: '🎫 Need more help?',
+                        name: '\n🎫 Need more help?\n',
                         value: 'Create a ticket and our support team will answer all your questions!',
                         inline: false
                     }
