@@ -263,16 +263,6 @@ async function setupBotsPanel(channel) {
                 name: '\n\n📦 WHAT\'S INCLUDED\n',
                 value: '```fix\n• Basic    → Simple commands & moderation\n• Advanced → Multiple systems & economy\n• Premium  → Full customization & features\n• Custom   → Unique & complex projects\n```',
                 inline: false
-            },
-            {
-                name: '\n\n💳 PAYMENT METHODS\n',
-                value: '<:807644paypal:1436584262479384707> **PayPal**\n<:binance:1436591160285073408> **Binance**',
-                inline: false
-            },
-            {
-                name: '\n\n📞 HOW TO ORDER\n',
-                value: '**Create a ticket to get started!**\nClick the button below to discuss your custom bot.',
-                inline: false
             }
         )
         .setImage('https://cdn.discordapp.com/attachments/1309783318031503384/1447798392595157082/CUSTOM-BOTS.gif?ex=6938eed3&is=69379d53&hm=8810ccbc6574db8867c484647f4ba46b99e3a00432d04cd600b3874b89298234&')
@@ -349,11 +339,6 @@ async function handleEmbedCommand(interaction) {
                         name: '\n🔵 3 MONTH SERVER BOOSTS\n',
                         value: '```fix\n• 6 Server Boosts  → 15$\n• 8 Server Boosts  → 20$\n• 14 Server Boosts → 35$\n```',
                         inline: false
-                    },
-                    {
-                        name: '\n💳 PAYMENT METHODS\n',
-                        value: '<:807644paypal:1436584262479384707> **PayPal**\n<:binance:1436591160285073408> **Binance**',
-                        inline: false
                     }
                 )
                 .setImage('https://cdn.discordapp.com/attachments/1309783318031503384/1447798393521967174/NITRO-BOOSTS.gif?ex=6938eed3&is=69379d53&hm=0d4600979261cb79ea268aa2646db8aef8d760bcab1a9be5bb2ff66d92cb46ee&')
@@ -383,16 +368,6 @@ async function handleEmbedCommand(interaction) {
                     {
                         name: '\n\n📦 WHAT\'S INCLUDED\n',
                         value: '```fix\n• Basic    → Simple commands & moderation\n• Advanced → Multiple systems & economy\n• Premium  → Full customization & features\n• Custom   → Unique & complex projects\n```',
-                        inline: false
-                    },
-                    {
-                        name: '\n\n💳 PAYMENT METHODS\n',
-                        value: '<:807644paypal:1436584262479384707> **PayPal**\n<:binance:1436591160285073408> **Binance**',
-                        inline: false
-                    },
-                    {
-                        name: '\n\n📞 HOW TO ORDER\n',
-                        value: '**Create a ticket to get started!**\nClick the button below to open a purchase ticket.',
                         inline: false
                     }
                 )
