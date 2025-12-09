@@ -31,6 +31,10 @@ const commands = [
         description: 'Configurar el panel de Nitro Tokens'
     },
     {
+        name: 'setup-afk',
+        description: 'Configurar el panel de AFK Tool'
+    },
+    {
         name: 'setup-welcome',
         description: 'Configurar el sistema de bienvenida',
         options: [
@@ -224,7 +228,7 @@ async function setupTicketPanel(channel) {
             },
             {
                 name: '\n📋 INSTRUCTIONS\n',
-                value: '» Click the **"Start Purchase"** button\n» Select the package you want\n» A staff member will assist you\n» Read the terms before proceeding',
+                value: '» Select a package from the menu below\n» Your ticket will be created automatically\n» A staff member will assist you\n» Read the terms before proceeding',
                 inline: false
             }
         )
@@ -234,10 +238,16 @@ async function setupTicketPanel(channel) {
 
     const row = new ActionRowBuilder()
         .addComponents(
-            new ButtonBuilder()
-                .setCustomId('create_ticket')
-                .setLabel('🛒 Start Purchase')
-                .setStyle(ButtonStyle.Success)
+            new StringSelectMenuBuilder()
+                .setCustomId('boost_panel_menu')
+                .setPlaceholder('Select a Server Boost package')
+                .addOptions(
+                    config.boostOptions.map(option => ({
+                        label: option.label,
+                        description: option.description,
+                        value: option.value
+                    }))
+                )
         );
 
     await channel.send({ embeds: [embed], components: [row] });
@@ -271,10 +281,16 @@ async function setupBotsPanel(channel) {
 
     const row = new ActionRowBuilder()
         .addComponents(
-            new ButtonBuilder()
-                .setCustomId('create_ticket_bot')
-                .setLabel('🎫 Create Ticket')
-                .setStyle(ButtonStyle.Primary)
+            new StringSelectMenuBuilder()
+                .setCustomId('bot_panel_menu')
+                .setPlaceholder('Select bot type')
+                .addOptions(
+                    config.botOptions.map(option => ({
+                        label: option.label,
+                        description: option.description,
+                        value: option.value
+                    }))
+                )
         );
 
     await channel.send({ embeds: [embed], components: [row] });
@@ -309,10 +325,79 @@ async function setupNitroPanel(channel) {
 
     const row = new ActionRowBuilder()
         .addComponents(
-            new ButtonBuilder()
-                .setCustomId('create_ticket_nitro')
-                .setLabel('💎 Buy Nitro')
-                .setStyle(ButtonStyle.Primary)
+            new StringSelectMenuBuilder()
+                .setCustomId('nitro_panel_menu')
+                .setPlaceholder('Select Nitro duration')
+                .addOptions(
+                    config.nitroOptions.map(option => ({
+                        label: option.label,
+                        description: option.description,
+                        value: option.value
+                    }))
+                )
+        );
+
+    await channel.send({ embeds: [embed], components: [row] });
+}
+
+// Función para crear el panel de AFK Tool
+async function setupAFKPanel(channel) {
+    const embed = new EmbedBuilder()
+        .setColor('#00D9A3')
+        .setTitle('🎮 AFK TOOL - GAME FARMING')
+        .setDescription('━━━━━━━━━━━━━━━━━━━━━━━━━')
+        .addFields(
+            {
+                name: '\n🟢 PER MATCH\n',
+                value: '```fix\n• 1 Match   → 5$\n• 5 Matches  → 15$\n• 10 Matches → 25$\n• 15 Matches → 35$\n```',
+                inline: false
+            },
+            {
+                name: '\n🔵 PER HOUR\n',
+                value: '```fix\n• 1h           → 20$\n• 2h           → 35$\n• 3h           → 50$\n• 6h (5h+1h)   → 90$\n```',
+                inline: false
+            },
+            {
+                name: '\n⭐ LIFETIME ACCESS\n',
+                value: '```fix\n• Full Mastery → 150$\n```',
+                inline: false
+            },
+            {
+                name: '\n🔄 HWID RESET\n',
+                value: '```fix\n• Reset your Hardware ID → 5$\n```',
+                inline: false
+            },
+            {
+                name: '\n📋 WHAT YOU GET\n',
+                value: '• Automated game farming\n• Safe and undetectable\n• Fast rank progression\n• 24/7 support\n• Money back guarantee',
+                inline: false
+            },
+            {
+                name: '\n📞 HOW TO ORDER\n',
+                value: 'Select an option from the menu below to create a ticket',
+                inline: false
+            }
+        )
+        .setFooter({ text: '🎮 Factory Tools • Professional AFK Service' })
+        .setTimestamp();
+
+    const row = new ActionRowBuilder()
+        .addComponents(
+            new StringSelectMenuBuilder()
+                .setCustomId('afk_service_menu')
+                .setPlaceholder('Select a service')
+                .addOptions([
+                    {
+                        label: '🎮 AFK Tool',
+                        description: 'Purchase AFK Tool farming service',
+                        value: 'afk_tool'
+                    },
+                    {
+                        label: '🔄 HWID Reset',
+                        description: 'Reset your Hardware ID',
+                        value: 'hwid_reset'
+                    }
+                ])
         );
 
     await channel.send({ embeds: [embed], components: [row] });
@@ -542,6 +627,21 @@ client.on('interactionCreate', async (interaction) => {
                 await interaction.editReply({ content: '✅ Panel de nitro tokens creado correctamente!' });
             }
             
+            if (interaction.commandName === 'setup-afk') {
+                // Verificar que sea administrador
+                if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
+                    return interaction.reply({ 
+                        content: '❌ Solo los administradores pueden usar este comando.', 
+                        ephemeral: true 
+                    });
+                }
+                
+                // Responder INMEDIATAMENTE
+                await interaction.reply({ content: '⏳ Creando panel de AFK Tool...', ephemeral: true });
+                await setupAFKPanel(interaction.channel);
+                await interaction.editReply({ content: '✅ Panel de AFK Tool creado correctamente!' });
+            }
+            
             if (interaction.commandName === 'setup-welcome') {
                 // Verificar que sea administrador
                 if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
@@ -604,6 +704,10 @@ client.on('interactionCreate', async (interaction) => {
                 // Responder INMEDIATAMENTE
                 await interaction.reply({ content: '⏳ Creando tu ticket...', ephemeral: true });
                 await handleTicketCreation(interaction, 'nitro');
+            } else if (interaction.customId === 'create_ticket_afk') {
+                // Responder INMEDIATAMENTE
+                await interaction.reply({ content: '⏳ Creando tu ticket...', ephemeral: true });
+                await handleTicketCreation(interaction, 'afk');
             } else if (interaction.customId === 'close_ticket') {
                 await closeTicketButton(interaction);
             } else if (interaction.customId === 'close_confirm') {
@@ -666,12 +770,37 @@ client.on('interactionCreate', async (interaction) => {
 
         // Menús desplegables
         if (interaction.isStringSelectMenu()) {
-            if (interaction.customId === 'select_boost_package') {
+            // Menús de los PANELES (crean tickets directamente)
+            if (interaction.customId === 'boost_panel_menu') {
+                await interaction.reply({ content: '⏳ Creando tu ticket...', ephemeral: true });
+                await handleTicketCreation(interaction, 'boost', interaction.values[0]);
+            } else if (interaction.customId === 'bot_panel_menu') {
+                await interaction.reply({ content: '⏳ Creando tu ticket...', ephemeral: true });
+                await handleTicketCreation(interaction, 'bot', interaction.values[0]);
+            } else if (interaction.customId === 'nitro_panel_menu') {
+                await interaction.reply({ content: '⏳ Creando tu ticket...', ephemeral: true });
+                await handleTicketCreation(interaction, 'nitro', interaction.values[0]);
+            } else if (interaction.customId === 'afk_service_menu') {
+                // Handler del menú de servicios de AFK
+                const selectedService = interaction.values[0];
+                
+                if (selectedService === 'afk_tool') {
+                    await interaction.reply({ content: '⏳ Creando tu ticket de AFK Tool...', ephemeral: true });
+                    await handleTicketCreation(interaction, 'afk');
+                } else if (selectedService === 'hwid_reset') {
+                    await interaction.reply({ content: '⏳ Creando tu ticket de HWID Reset...', ephemeral: true });
+                    await handleTicketCreation(interaction, 'hwid');
+                }
+            }
+            // Menús DENTRO de los tickets (selección de paquetes)
+            else if (interaction.customId === 'select_boost_package') {
                 await handleBoostSelection(interaction);
             } else if (interaction.customId === 'select_bot_package') {
                 await handleBotSelection(interaction);
             } else if (interaction.customId === 'select_nitro_package') {
                 await handleNitroSelection(interaction);
+            } else if (interaction.customId === 'select_afk_package') {
+                await handleAFKSelection(interaction);
             }
             return;
         }
@@ -690,7 +819,7 @@ client.on('interactionCreate', async (interaction) => {
 });
 
 // Crear ticket
-async function handleTicketCreation(interaction, type = 'boost') {
+async function handleTicketCreation(interaction, type = 'boost', selectedPackage = null) {
     // Verificar si el usuario ya tiene un ticket abierto
     const existingTicket = interaction.guild.channels.cache.find(
         ch => ch.name === `purchase-${interaction.user.username.toLowerCase()}` && ch.type === ChannelType.GuildText
@@ -713,6 +842,12 @@ async function handleTicketCreation(interaction, type = 'boost') {
         } else if (type === 'bot') {
             categoryId = process.env.BOT_TICKET_CATEGORY_ID;
             channelName = `purchase-${interaction.user.username}`;
+        } else if (type === 'afk') {
+            categoryId = process.env.AFK_TICKET_CATEGORY_ID || process.env.TICKET_CATEGORY_ID;
+            channelName = `afk-${interaction.user.username}`;
+        } else if (type === 'hwid') {
+            categoryId = process.env.AFK_TICKET_CATEGORY_ID || process.env.TICKET_CATEGORY_ID;
+            channelName = `hwid-${interaction.user.username}`;
         } else {
             categoryId = process.env.TICKET_CATEGORY_ID;
             channelName = `purchase-${interaction.user.username}`;
@@ -768,7 +903,7 @@ async function handleTicketCreation(interaction, type = 'boost') {
 
         // Guardar en base de datos JSON
         const ticketId = Math.floor(Math.random() * 9000) + 1000;
-        const ticketType = type === 'bot' ? 'Custom Bot' : type === 'nitro' ? 'Nitro Token' : 'Boost';
+        const ticketType = type === 'bot' ? 'Custom Bot' : type === 'nitro' ? 'Nitro Token' : type === 'afk' ? 'AFK Tool' : type === 'hwid' ? 'HWID Reset' : 'Boost';
         db.addTicket({
             id: ticketId,
             channelId: ticketChannel.id,
@@ -782,60 +917,137 @@ async function handleTicketCreation(interaction, type = 'boost') {
         // Embed y menú según el tipo de ticket
         let welcomeEmbed, selectMenu;
         
-        if (type === 'nitro') {
+        // Si ya se seleccionó un paquete desde el panel, mostrar info directamente
+        if (selectedPackage) {
+            let packageInfo;
+            let packageTitle;
+            let packageColor;
+            
+            if (type === 'nitro') {
+                packageInfo = config.nitroOptions.find(opt => opt.value === selectedPackage);
+                packageTitle = '🎫 Ticket Created - Nitro Token';
+                packageColor = '#5865F2';
+            } else if (type === 'bot') {
+                packageInfo = config.botOptions.find(opt => opt.value === selectedPackage);
+                packageTitle = '🎫 Ticket Created - Custom Bot';
+                packageColor = '#00D9A3';
+            } else if (type === 'afk') {
+                packageInfo = config.afkOptions.find(opt => opt.value === selectedPackage);
+                packageTitle = '🎫 Ticket Created - AFK Tool';
+                packageColor = '#00D9A3';
+            } else {
+                packageInfo = config.boostOptions.find(opt => opt.value === selectedPackage);
+                packageTitle = '🎫 Ticket Created - Factory Boosts';
+                packageColor = '#00D9A3';
+            }
+            
             welcomeEmbed = new EmbedBuilder()
-                .setColor('#5865F2')
-                .setTitle('🎫 Ticket Created - Nitro Token')
-                .setDescription(`Hello ${interaction.user}! Thank you for creating a ticket.\n\n**Please select the Nitro duration you want:**`)
+                .setColor(packageColor)
+                .setTitle(packageTitle)
+                .setDescription(`Hello ${interaction.user}! Thank you for creating a ticket.\n\n**Selected Package:** ${packageInfo?.label || selectedPackage}\n${packageInfo?.description || ''}\n\n**Price:** ${packageInfo?.price || 'Contact staff'}\n\nA staff member will assist you shortly with your purchase.`)
                 .setTimestamp();
-
-            selectMenu = new StringSelectMenuBuilder()
-                .setCustomId('select_nitro_package')
-                .setPlaceholder('Select Nitro duration')
-                .addOptions(
-                    config.nitroOptions.map(option => ({
-                        label: option.label,
-                        description: option.description,
-                        value: option.value
-                    }))
-                );
-        } else if (type === 'bot') {
-            welcomeEmbed = new EmbedBuilder()
-                .setColor('#00D9A3')
-                .setTitle('🎫 Ticket Created - Custom Bot')
-                .setDescription(`Hello ${interaction.user}! Thank you for creating a ticket.\n\n**Please select the type of bot you want:**`)
-                .setTimestamp();
-
-            selectMenu = new StringSelectMenuBuilder()
-                .setCustomId('select_bot_package')
-                .setPlaceholder('Select bot type')
-                .addOptions(
-                    config.botOptions.map(option => ({
-                        label: option.label,
-                        description: option.description,
-                        value: option.value
-                    }))
-                );
+            
+            selectMenu = null; // No menu needed, package already selected
         } else {
-            welcomeEmbed = new EmbedBuilder()
-                .setColor('#00D9A3')
-                .setTitle('🎫 Ticket Created - Factory Boosts')
-                .setDescription(`Hello ${interaction.user}! Thank you for creating a ticket.\n\n**Please select the boost package you want to purchase:**`)
-                .setTimestamp();
+            // Lógica original: mostrar menú de selección dentro del ticket
+            if (type === 'nitro') {
+                welcomeEmbed = new EmbedBuilder()
+                    .setColor('#5865F2')
+                    .setTitle('🎫 Ticket Created - Nitro Token')
+                    .setDescription(`Hello ${interaction.user}! Thank you for creating a ticket.\n\n**Please select the Nitro duration you want:**`)
+                    .setTimestamp();
 
-            selectMenu = new StringSelectMenuBuilder()
-                .setCustomId('select_boost_package')
-                .setPlaceholder('Select a Server Boost package')
-                .addOptions(
-                    config.boostOptions.map(option => ({
-                        label: option.label,
-                        description: option.description,
-                        value: option.value
-                    }))
-                );
+                selectMenu = new StringSelectMenuBuilder()
+                    .setCustomId('select_nitro_package')
+                    .setPlaceholder('Select Nitro duration')
+                    .addOptions(
+                        config.nitroOptions.map(option => ({
+                            label: option.label,
+                            description: option.description,
+                            value: option.value
+                        }))
+                    );
+            } else if (type === 'bot') {
+                welcomeEmbed = new EmbedBuilder()
+                    .setColor('#00D9A3')
+                    .setTitle('🎫 Ticket Created - Custom Bot')
+                    .setDescription(`Hello ${interaction.user}! Thank you for creating a ticket.\n\n**Please select the type of bot you want:**`)
+                    .setTimestamp();
+
+                selectMenu = new StringSelectMenuBuilder()
+                    .setCustomId('select_bot_package')
+                    .setPlaceholder('Select bot type')
+                    .addOptions(
+                        config.botOptions.map(option => ({
+                            label: option.label,
+                            description: option.description,
+                            value: option.value
+                        }))
+                    );
+            } else if (type === 'afk') {
+                welcomeEmbed = new EmbedBuilder()
+                    .setColor('#00D9A3')
+                    .setTitle('🎫 Ticket Created - AFK Tool')
+                    .setDescription(`Hello ${interaction.user}! Thank you for creating a ticket.\n\n**Please select the AFK farming package you want:**`)
+                    .setTimestamp();
+
+                selectMenu = new StringSelectMenuBuilder()
+                    .setCustomId('select_afk_package')
+                    .setPlaceholder('Select farming package')
+                    .addOptions(
+                        config.afkOptions.map(option => ({
+                            label: option.label,
+                            description: option.description,
+                            value: option.value
+                        }))
+                    );
+            } else if (type === 'hwid') {
+                welcomeEmbed = new EmbedBuilder()
+                    .setColor('#00D9A3')
+                    .setTitle('🎫 Ticket Created - HWID Reset')
+                    .setDescription(`Hello ${interaction.user}! Thank you for creating a ticket.\n\n**HWID Reset Service - $5**\n\nPlease wait for a staff member to assist you with the reset process.`)
+                    .addFields(
+                        {
+                            name: '📋 What you need to provide:',
+                            value: '• Your current HWID\n• Payment confirmation\n• Discord username linked to the tool',
+                            inline: false
+                        },
+                        {
+                            name: '⏱️ Processing Time:',
+                            value: 'Usually completed within 5-15 minutes',
+                            inline: false
+                        }
+                    )
+                    .setTimestamp();
+
+                selectMenu = null; // No hay menú para HWID reset
+            } else {
+                welcomeEmbed = new EmbedBuilder()
+                    .setColor('#00D9A3')
+                    .setTitle('🎫 Ticket Created - Factory Boosts')
+                    .setDescription(`Hello ${interaction.user}! Thank you for creating a ticket.\n\n**Please select the boost package you want to purchase:**`)
+                    .setTimestamp();
+
+                selectMenu = new StringSelectMenuBuilder()
+                    .setCustomId('select_boost_package')
+                    .setPlaceholder('Select a Server Boost package')
+                    .addOptions(
+                        config.boostOptions.map(option => ({
+                            label: option.label,
+                            description: option.description,
+                            value: option.value
+                        }))
+                    );
+            }
         }
 
-        const row1 = new ActionRowBuilder().addComponents(selectMenu);
+        // Crear componentes solo si hay selectMenu
+        const components = [];
+        
+        if (selectMenu) {
+            const row1 = new ActionRowBuilder().addComponents(selectMenu);
+            components.push(row1);
+        }
 
         // Botón para cerrar ticket
         const row2 = new ActionRowBuilder()
@@ -845,11 +1057,13 @@ async function handleTicketCreation(interaction, type = 'boost') {
                     .setLabel('🔒 Cerrar Ticket')
                     .setStyle(ButtonStyle.Danger)
             );
+        
+        components.push(row2);
 
         await ticketChannel.send({ 
             content: `${interaction.user}`,
             embeds: [welcomeEmbed], 
-            components: [row1, row2] 
+            components: components
         });
 
         await interaction.editReply({ 
@@ -1057,6 +1271,70 @@ async function handleNitroSelection(interaction) {
                     { name: '💎 Package', value: selectedOption.label, inline: true },
                     { name: '💰 Price', value: selectedOption.price, inline: true },
                     { name: '⏰ Duration', value: selectedOption.duration, inline: true },
+                    { name: '🎫 Ticket Channel', value: `${interaction.channel}`, inline: false }
+                )
+                .setThumbnail(interaction.user.displayAvatarURL())
+                .setFooter({ text: `User ID: ${interaction.user.id}` })
+                .setTimestamp();
+
+            await logChannel.send({ embeds: [staffNotification] });
+        } catch (error) {
+            console.error('Error al enviar notificación al canal de logs:', error);
+        }
+    }
+}
+
+// Manejar selección de AFK package
+async function handleAFKSelection(interaction) {
+    const selectedOption = config.afkOptions.find(opt => opt.value === interaction.values[0]);
+    
+    if (!selectedOption) {
+        return interaction.reply({ content: '❌ Opción no válida.', ephemeral: true });
+    }
+
+    // Buscar ticket en DB por channelId y actualizar detalles
+    const ticket = db.getTicketByChannelId(interaction.channel.id);
+    if (ticket) {
+        db.updateTicketDetails(ticket.id, {
+            package: selectedOption.label,
+            price: selectedOption.price,
+            quantity: selectedOption.quantity || null,
+            duration: selectedOption.duration || null
+        });
+    }
+
+    // Generar ID único del ticket (usar el del DB si existe)
+    const ticketId = ticket ? ticket.id : Math.floor(Math.random() * 9000) + 1000;
+    
+    // Embed de información del ticket
+    const ticketInfoEmbed = new EmbedBuilder()
+        .setColor('#00D9A3')
+        .setDescription(`🎫 **Ticket ID:** \`${ticketId}\`\n👤 **Ticket Owner:** \`${interaction.user.tag}\`\n⚠️ **Reminder:** \`Do not ping staff repeatedly\``)
+        .setFooter({ text: 'Tickets • Factory Tools' });
+
+    // Embed del paquete seleccionado
+    const afkEmbed = new EmbedBuilder()
+        .setColor('#00D9A3')
+        .setTitle('✅ AFK Package Selected')
+        .setDescription(`**${selectedOption.label}**\n\n💰 **Price:** ${selectedOption.price}\n${selectedOption.quantity ? `📦 **Quantity:** ${selectedOption.quantity} matches` : `⏰ **Duration:** ${selectedOption.duration}`}\n\n📝 A staff member will set up your AFK farming service.\n\n**What happens next:**\n• Provide your game account details\n• Staff configures the tool\n• Automated farming begins\n• Track progress in real-time`)
+        .setTimestamp();
+
+    // Responder a la interacción
+    await interaction.reply({ embeds: [ticketInfoEmbed, afkEmbed] });
+
+    // Notificar al staff en canal de logs
+    if (process.env.STAFF_LOG_CHANNEL_ID) {
+        try {
+            const logChannel = await interaction.guild.channels.fetch(process.env.STAFF_LOG_CHANNEL_ID);
+            
+            const staffNotification = new EmbedBuilder()
+                .setColor(config.colors.warning)
+                .setTitle('🎮 New AFK Tool Request')
+                .setDescription(`A customer has requested AFK farming service`)
+                .addFields(
+                    { name: '👤 User', value: `${interaction.user} (${interaction.user.tag})`, inline: true },
+                    { name: '📦 Package', value: selectedOption.label, inline: true },
+                    { name: '💰 Price', value: selectedOption.price, inline: true },
                     { name: '🎫 Ticket Channel', value: `${interaction.channel}`, inline: false }
                 )
                 .setThumbnail(interaction.user.displayAvatarURL())
