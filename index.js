@@ -368,6 +368,7 @@ async function setupAFKPanel(channel) {
                 inline: false
             }
         )
+        .setImage('https://cdn.discordapp.com/attachments/1309783318031503384/1447989195451797646/AFK_TOOL.gif?ex=6939a086&is=69384f06&hm=42cc46c563fa61cabe48d8914edbe60123cf51832818867eb078ece099e543be&')
         .setFooter({ text: '🎮 Factory Tools • Professional AFK Service' })
         .setTimestamp();
 
