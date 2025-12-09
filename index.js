@@ -227,7 +227,7 @@ async function setupTicketPanel(channel) {
                 inline: false
             }
         )
-        .setImage('https://media.discordapp.net/attachments/1309783318031503384/1447810535256096819/NITRO_BOOSTS.gif?ex=6938fa22&is=6937a8a2&hm=7ebfef327f6c6660572392f7de481798a489302719e8ef2f69ec8dc979a35932&=&width=928&height=522')
+        .setImage('https://cdn.discordapp.com/attachments/1309783318031503384/1447815600905916538/NITRO_BOOSTS.gif?ex=6938feda&is=6937ad5a&hm=b800e00ab3b7326b1209675bce9b5abdc5f7ca3a1304dc56d6e0911ae3ae72e8&')
         .setFooter({ text: '👑 Factory Boosts • Trusted Service' })
         .setTimestamp();
 
@@ -265,7 +265,7 @@ async function setupBotsPanel(channel) {
                 inline: false
             }
         )
-        .setImage('https://media.discordapp.net/attachments/1309783318031503384/1447810534651986012/CUSTOM_BOTS.gif?ex=6938fa22&is=6937a8a2&hm=12573da9fadcf29a34438a6ccae79baab620b7340b4ed34b430d21c004f0b110&=&width=928&height=522')
+        .setImage('https://cdn.discordapp.com/attachments/1309783318031503384/1447815599957872793/CUSTOM_BOTS.gif?ex=6938feda&is=6937ad5a&hm=2e541bad78f18481c616c26b07bc4c22c74c424ff9670d342390f80c7661bcf8&')
         .setFooter({ text: '🤖 Factory Development • Quality Custom Bots' });
 
     const row = new ActionRowBuilder()
@@ -302,7 +302,7 @@ async function setupNitroPanel(channel) {
                 inline: false
             }
         )
-        .setImage('https://media.discordapp.net/attachments/1309783318031503384/1447810536015134730/NITRO_TOKENS.gif?ex=6938fa22&is=6937a8a2&hm=593bb8593ea6bff751db251a61ecd828b47efcded199030e74d59db172194ac2&=&width=928&height=522')
+        .setImage('https://cdn.discordapp.com/attachments/1309783318031503384/1447815600461316106/NITRO_TOKENS.gif?ex=6938feda&is=6937ad5a&hm=17ca989428bcd27ad6b735f7cad7e8b686fbb691ae62c07fa7410f1a4c62feb8&')
         .setFooter({ text: '💎 Factory Boosts • Instant Delivery' })
         .setTimestamp();
 
@@ -341,7 +341,7 @@ async function handleEmbedCommand(interaction) {
                         inline: false
                     }
                 )
-                .setImage('https://media.discordapp.net/attachments/1309783318031503384/1447810535256096819/NITRO_BOOSTS.gif?ex=6938fa22&is=6937a8a2&hm=7ebfef327f6c6660572392f7de481798a489302719e8ef2f69ec8dc979a35932&=&width=928&height=522')
+                .setImage('https://cdn.discordapp.com/attachments/1309783318031503384/1447815600905916538/NITRO_BOOSTS.gif?ex=6938feda&is=6937ad5a&hm=b800e00ab3b7326b1209675bce9b5abdc5f7ca3a1304dc56d6e0911ae3ae72e8&')
                 .setFooter({ text: '👑 Factory Boosts • Trusted Service' });
             
             await canal.send({ embeds: [embed] });
@@ -371,7 +371,7 @@ async function handleEmbedCommand(interaction) {
                         inline: false
                     }
                 )
-                .setImage('https://media.discordapp.net/attachments/1309783318031503384/1447810534651986012/CUSTOM_BOTS.gif?ex=6938fa22&is=6937a8a2&hm=12573da9fadcf29a34438a6ccae79baab620b7340b4ed34b430d21c004f0b110&=&width=928&height=522')
+                .setImage('https://cdn.discordapp.com/attachments/1309783318031503384/1447815599957872793/CUSTOM_BOTS.gif?ex=6938feda&is=6937ad5a&hm=2e541bad78f18481c616c26b07bc4c22c74c424ff9670d342390f80c7661bcf8&')
                 .setFooter({ text: '🤖 Factory Development • Quality Custom Bots' });
             
             await canal.send({ embeds: [embed] });
