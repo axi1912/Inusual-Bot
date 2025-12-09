@@ -348,23 +348,13 @@ async function setupAFKPanel(channel) {
         .setDescription('━━━━━━━━━━━━━━━━━━━━━━━━━')
         .addFields(
             {
-                name: '\n🟢 PER MATCH\n',
-                value: '```fix\n• 1 Match     → 5$\n• 5 Matches   → 15$\n• 10 Matches  → 25$\n• 15 Matches  → 35$\n```',
-                inline: false
-            },
-            {
-                name: '\n🔵 PER HOUR\n',
-                value: '```fix\n• 1h          → 20$\n• 2h          → 35$\n• 3h          → 50$\n• 6h (5h+1h)  → 90$\n```',
-                inline: false
-            },
-            {
-                name: '\n⭐ LIFETIME ACCESS\n',
-                value: '```fix\n• Full Mastery → 150$\n```',
+                name: '\n⏰ SUBSCRIPTION PLANS\n',
+                value: '```fix\n• 7 Days      → 5$\n• 30 Days     → 15$\n• 90 Days     → 35$\n• Lifetime    → 50$\n```',
                 inline: false
             },
             {
                 name: '\n🔄 HWID RESET\n',
-                value: '```fix\n• Reset your Hardware ID → 5$\n```',
+                value: '```fix\n• Reset your Hardware ID\n```',
                 inline: false
             },
             {
