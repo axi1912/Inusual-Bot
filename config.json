@@ -97,30 +97,30 @@
   ],
   "afkOptions": [
     {
-      "label": "7 Days - Trial ($5)",
+      "label": "7 Days ($5)",
       "value": "afk_7days",
-      "description": "Short trial period",
+      "description": "Short trial",
       "price": "$5",
       "duration": "7 days"
     },
     {
-      "label": "30 Days - Monthly ($15)",
+      "label": "30 Days ($15)",
       "value": "afk_30days",
-      "description": "Most popular option",
+      "description": "Monthly - Most popular",
       "price": "$15",
       "duration": "30 days"
     },
     {
-      "label": "90 Days - Quarterly ($35)",
+      "label": "90 Days ($35)",
       "value": "afk_90days",
-      "description": "Save $10 - Best value!",
+      "description": "Quarterly - Save $10",
       "price": "$35",
       "duration": "90 days"
     },
     {
-      "label": "Lifetime Access ($50)",
+      "label": "Lifetime ($50)",
       "value": "afk_lifetime",
-      "description": "One-time payment - Forever access",
+      "description": "One-time payment",
       "price": "$50",
       "duration": "Lifetime"
     }

@@ -349,12 +349,12 @@ async function setupAFKPanel(channel) {
         .addFields(
             {
                 name: '\n🟢 PER MATCH\n',
-                value: '```fix\n• 1 Match   → 5$\n• 5 Matches  → 15$\n• 10 Matches → 25$\n• 15 Matches → 35$\n```',
+                value: '```fix\n• 1 Match     → 5$\n• 5 Matches   → 15$\n• 10 Matches  → 25$\n• 15 Matches  → 35$\n```',
                 inline: false
             },
             {
                 name: '\n🔵 PER HOUR\n',
-                value: '```fix\n• 1h           → 20$\n• 2h           → 35$\n• 3h           → 50$\n• 6h (5h+1h)   → 90$\n```',
+                value: '```fix\n• 1h          → 20$\n• 2h          → 35$\n• 3h          → 50$\n• 6h (5h+1h)  → 90$\n```',
                 inline: false
             },
             {
