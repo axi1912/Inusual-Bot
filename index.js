@@ -60,6 +60,7 @@ const commands = [
                 choices: [
                     { name: 'Precios - Factory Boosts', value: 'precios' },
                     { name: 'Custom Bots - Servicios', value: 'custombots' },
+                    { name: 'FAQs - Factory Boosts', value: 'faqs' },
                     { name: 'Anuncio Simple', value: 'anuncio' }
                 ]
             },
@@ -376,6 +377,61 @@ async function handleEmbedCommand(interaction) {
             
             await canal.send({ embeds: [embed] });
             return interaction.reply({ content: `✅ Mensaje de custom bots enviado a ${canal}`, ephemeral: true });
+        }
+        
+        // Preset de FAQs
+        if (preset === 'faqs') {
+            const embed = new EmbedBuilder()
+                .setColor('#00D9A3')
+                .setTitle('❓ FREQUENTLY ASKED QUESTIONS')
+                .setDescription('━━━━━━━━━━━━━━━━━━━━━━━━━\n**Everything you need to know about Factory Boosts**')
+                .addFields(
+                    {
+                        name: '🚀 What are Server Boosts?',
+                        value: 'Server Boosts unlock premium features for your Discord server like better audio quality, custom server banner, more emoji slots, and increased upload limit.',
+                        inline: false
+                    },
+                    {
+                        name: '⏱️ How long do boosts last?',
+                        value: 'We offer boosts in **1 month** and **3 months** duration. The boost timer starts immediately after activation.',
+                        inline: false
+                    },
+                    {
+                        name: '💳 What payment methods do you accept?',
+                        value: 'We accept **PayPal** and **Binance** (crypto). All payments are secure and processed instantly.',
+                        inline: false
+                    },
+                    {
+                        name: '📦 How do I receive my boosts?',
+                        value: 'After payment confirmation:\n• You provide your server invite\n• Our team activates the boosts\n• Delivery time: **5-15 minutes**',
+                        inline: false
+                    },
+                    {
+                        name: '🔒 Are the boosts safe?',
+                        value: 'Yes! All our boosts are **100% legitimate** and comply with Discord Terms of Service. Your server is completely safe.',
+                        inline: false
+                    },
+                    {
+                        name: '🔄 What if a boost drops?',
+                        value: 'If any boost drops during the purchased period, we will **replace it for free** within 24 hours. We guarantee full coverage.',
+                        inline: false
+                    },
+                    {
+                        name: '💬 How do I place an order?',
+                        value: 'Simply click the **"Start Purchase"** button in our tickets channel, select your package, and our staff will assist you immediately.',
+                        inline: false
+                    },
+                    {
+                        name: '🎫 Need more help?',
+                        value: 'Create a ticket and our support team will answer all your questions!',
+                        inline: false
+                    }
+                )
+                .setFooter({ text: '👑 Factory Boosts • Your Trusted Boosting Service' })
+                .setTimestamp();
+            
+            await canal.send({ embeds: [embed] });
+            return interaction.reply({ content: `✅ Mensaje de FAQs enviado a ${canal}`, ephemeral: true });
         }
         
         // Embed personalizado normal
