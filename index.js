@@ -1005,7 +1005,7 @@ async function handleTicketCreation(interaction, type = 'boost', selectedPackage
                 welcomeEmbed = new EmbedBuilder()
                     .setColor('#00D9A3')
                     .setTitle('🎫 Ticket Created - HWID Reset')
-                    .setDescription(`Hello ${interaction.user}! Thank you for creating a ticket.\n\n**HWID Reset Service - $5**\n\nPlease wait for a staff member to assist you with the reset process.`)
+                    .setDescription(`Hello ${interaction.user}! Thank you for creating a ticket.\n\n**HWID Reset Service**\n\nPlease wait for a staff member to assist you with the reset process.`)
                     .addFields(
                         {
                             name: '📋 What you need to provide:',

@@ -97,67 +97,32 @@
   ],
   "afkOptions": [
     {
-      "label": "1 Match (5$)",
-      "value": "afk_1match",
-      "description": "Single match farming",
-      "price": "5$",
-      "quantity": 1
+      "label": "7 Days - Trial ($5)",
+      "value": "afk_7days",
+      "description": "Short trial period",
+      "price": "$5",
+      "duration": "7 days"
     },
     {
-      "label": "5 Matches (15$)",
-      "value": "afk_5matches",
-      "description": "5 matches farming",
-      "price": "15$",
-      "quantity": 5
+      "label": "30 Days - Monthly ($15)",
+      "value": "afk_30days",
+      "description": "Most popular option",
+      "price": "$15",
+      "duration": "30 days"
     },
     {
-      "label": "10 Matches (25$)",
-      "value": "afk_10matches",
-      "description": "10 matches farming",
-      "price": "25$",
-      "quantity": 10
+      "label": "90 Days - Quarterly ($35)",
+      "value": "afk_90days",
+      "description": "Save $10 - Best value!",
+      "price": "$35",
+      "duration": "90 days"
     },
     {
-      "label": "15 Matches (35$)",
-      "value": "afk_15matches",
-      "description": "15 matches farming",
-      "price": "35$",
-      "quantity": 15
-    },
-    {
-      "label": "1 Hour (20$)",
-      "value": "afk_1hour",
-      "description": "1 hour of farming",
-      "price": "20$",
-      "duration": "1h"
-    },
-    {
-      "label": "2 Hours (35$)",
-      "value": "afk_2hours",
-      "description": "2 hours of farming",
-      "price": "35$",
-      "duration": "2h"
-    },
-    {
-      "label": "3 Hours (50$)",
-      "value": "afk_3hours",
-      "description": "3 hours of farming",
-      "price": "50$",
-      "duration": "3h"
-    },
-    {
-      "label": "6 Hours - Special (90$)",
-      "value": "afk_6hours",
-      "description": "5h+1h bonus - Best value!",
-      "price": "90$",
-      "duration": "6h"
-    },
-    {
-      "label": "Lifetime Access (150$)",
+      "label": "Lifetime Access ($50)",
       "value": "afk_lifetime",
-      "description": "Farm until mastery achieved",
-      "price": "150$",
-      "duration": "Unlimited"
+      "description": "One-time payment - Forever access",
+      "price": "$50",
+      "duration": "Lifetime"
     }
   ],
   "colors": {
