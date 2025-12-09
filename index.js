@@ -227,7 +227,7 @@ async function setupTicketPanel(channel) {
                 inline: false
             }
         )
-        .setImage('https://cdn.discordapp.com/attachments/1309783318031503384/1438385544043430030/banner_factory.gif?ex=6916b06d&is=69155eed&hm=cc3d8842a292692983ed0ccf4114f3baf53681b386260983a513862de799d17e&')
+        .setImage('https://cdn.discordapp.com/attachments/1309783318031503384/1447768039125946368/NITRO_BOOSTS.mp4?ex=6938d28e&is=6937810e&hm=5a188bdf0ebdb9df3894fe7d6d20b3f3318447d8904ce5985ab5f2799572cafa&')
         .setFooter({ text: '👑 Factory Boosts • Trusted Service' })
         .setTimestamp();
 
