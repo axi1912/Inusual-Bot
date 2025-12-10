@@ -157,49 +157,29 @@ client.on('guildMemberAdd', async (member) => {
         return;
     }
     
-    // Crear el embed de bienvenida simplificado
+    // Crear el embed de bienvenida simple con solo imagen
     const welcomeEmbed = new EmbedBuilder()
         .setColor(config.welcome.color)
-        .setAuthor({ 
-            name: `${member.user.tag} just joined the server!`,
-            iconURL: member.user.displayAvatarURL({ dynamic: true })
-        })
-        .setTitle(config.welcome.title.replace('{user}', member.user.username))
-        .setDescription(config.welcome.description.replace('{user}', `<@${member.id}>`))
-        .setThumbnail(member.guild.iconURL({ dynamic: true, size: 256 }))
-        .addFields(
-            {
-                name: '\u200B',
-                value: '**📚 Essential Channels**',
-                inline: false
-            },
-            {
-                name: '\u200B',
-                value: `📜 <#1436822757462773861> - Rules\n📢 <#1436822948609786027> - Announcements\n📋 <#1436823599867760841> - Terms`,
-                inline: false
-            },
-            {
-                name: '\u200B',
-                value: '**🛒 Our Services**',
-                inline: false
-            },
-            {
-                name: '\u200B',
-                value: `🎫 <#1436573916154826823> - Server Boosts\n🤖 <#1436627760876621936> - Custom Bots`,
-                inline: false
-            }
-        )
-        .setImage(config.welcome.image)
-        .setFooter({ 
-            text: config.welcome.footer.replace('{memberCount}', member.guild.memberCount),
-            iconURL: member.guild.iconURL({ dynamic: true })
-        })
-        .setTimestamp();
+        .setImage(config.welcome.image);
+    
+    // Crear botón para la página web
+    const components = [];
+    if (config.welcome.websiteButton && config.welcome.websiteUrl) {
+        const row = new ActionRowBuilder()
+            .addComponents(
+                new ButtonBuilder()
+                    .setLabel('🌐 Website')
+                    .setURL(config.welcome.websiteUrl)
+                    .setStyle(ButtonStyle.Link)
+            );
+        components.push(row);
+    }
     
     try {
         await welcomeChannel.send({ 
-            content: `🎉 **Welcome <@${member.id}> to Factory Boosts!** 🌟`,
-            embeds: [welcomeEmbed]
+            content: `Hey <@${member.id}>`,
+            embeds: [welcomeEmbed],
+            components: components
         });
         console.log(`✅ Mensaje de bienvenida enviado para ${member.user.tag}`);
     } catch (error) {

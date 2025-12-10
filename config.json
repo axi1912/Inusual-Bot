@@ -134,11 +134,13 @@
   "welcome": {
     "enabled": true,
     "channelId": "1436830526291054592",
-    "title": "🎉 WELCOME TO FACTORY BOOSTS! 🎉",
-    "description": "**Hey {user}!** 👋\n\nWe're glad to have you here!\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+    "title": "",
+    "description": "",
     "color": "#00D9A3",
-    "image": "https://cdn.discordapp.com/attachments/1309783318031503384/1438385544043430030/banner_factory.gif?ex=6916b06d&is=69155eed&hm=cc3d8842a292692983ed0ccf4114f3baf53681b386260983a513862de799d17e&",
+    "image": "https://cdn.discordapp.com/attachments/1309783318031503384/1448176145768910909/FACTORY_BANNER_VERDE.gif?ex=693a4ea2&is=6938fd22&hm=ccbfffa92c0d4b08c851a2a3f6523ddef8ef86676cdf5d34c885c6018ec34010&",
     "thumbnail": null,
-    "footer": "👑 Factory Boosts • Member #{memberCount}"
+    "footer": "",
+    "websiteButton": true,
+    "websiteUrl": "https://factoryboosts.com"
   }
 }
