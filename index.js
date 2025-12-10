@@ -161,10 +161,13 @@ client.on('guildMemberAdd', async (member) => {
         return;
     }
     
-    // Crear el embed de bienvenida simple con solo imagen
+    // Crear el embed de bienvenida
     const welcomeEmbed = new EmbedBuilder()
         .setColor(config.welcome.color)
-        .setImage(config.welcome.image);
+        .setTitle(config.welcome.title)
+        .setDescription(`Hey ${member.user}\n${config.welcome.description}`)
+        .setImage(config.welcome.image)
+        .setFooter({ text: config.welcome.footer });
     
     // Crear botón para la página web
     const components = [];
@@ -181,7 +184,6 @@ client.on('guildMemberAdd', async (member) => {
     
     try {
         await welcomeChannel.send({ 
-            content: `Hey <@${member.id}>`,
             embeds: [welcomeEmbed],
             components: components
         });
@@ -675,7 +677,10 @@ client.on('interactionCreate', async (interaction) => {
                 // Crear el embed de bienvenida de prueba
                 const welcomeEmbed = new EmbedBuilder()
                     .setColor(config.welcome.color)
-                    .setImage(config.welcome.image);
+                    .setTitle(config.welcome.title)
+                    .setDescription(`Hey ${interaction.user}\n${config.welcome.description}`)
+                    .setImage(config.welcome.image)
+                    .setFooter({ text: config.welcome.footer });
                 
                 // Crear botón para la página web
                 const components = [];
@@ -691,7 +696,6 @@ client.on('interactionCreate', async (interaction) => {
                 }
                 
                 await interaction.reply({ 
-                    content: `Hey ${interaction.user}`,
                     embeds: [welcomeEmbed],
                     components: components
                 });

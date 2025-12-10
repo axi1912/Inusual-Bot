@@ -134,12 +134,12 @@
   "welcome": {
     "enabled": true,
     "channelId": "1436830526291054592",
-    "title": "",
-    "description": "",
+    "title": "FACTORY BOOSTS",
+    "description": "Welcome to FACTORY BOOSTS",
     "color": "#00D9A3",
     "image": "https://cdn.discordapp.com/attachments/1309783318031503384/1448176145768910909/FACTORY_BANNER_VERDE.gif?ex=693a4ea2&is=6938fd22&hm=ccbfffa92c0d4b08c851a2a3f6523ddef8ef86676cdf5d34c885c6018ec34010&",
     "thumbnail": null,
-    "footer": "",
+    "footer": "discord.gg/factoryboosts",
     "websiteButton": true,
     "websiteUrl": "https://factoryboosts.com"
   }
