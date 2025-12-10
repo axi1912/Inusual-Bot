@@ -161,9 +161,11 @@ client.on('guildMemberAdd', async (member) => {
         return;
     }
     
-    // Crear el embed de bienvenida (solo imagen y footer)
+    // Crear el embed de bienvenida
     const welcomeEmbed = new EmbedBuilder()
         .setColor(config.welcome.color)
+        .setTitle(config.welcome.title)
+        .setDescription(`Hey ${member.user}\n${config.welcome.description}`)
         .setImage(config.welcome.image)
         .setFooter({ text: config.welcome.footer });
     
@@ -182,7 +184,6 @@ client.on('guildMemberAdd', async (member) => {
     
     try {
         await welcomeChannel.send({ 
-            content: `**${config.welcome.title}**\n\nHey ${member.user}\n${config.welcome.description}`,
             embeds: [welcomeEmbed],
             components: components
         });
@@ -673,9 +674,11 @@ client.on('interactionCreate', async (interaction) => {
                     });
                 }
                 
-                // Crear el embed de bienvenida de prueba (solo imagen y footer)
+                // Crear el embed de bienvenida de prueba
                 const welcomeEmbed = new EmbedBuilder()
                     .setColor(config.welcome.color)
+                    .setTitle(config.welcome.title)
+                    .setDescription(`Hey ${interaction.user}\n${config.welcome.description}`)
                     .setImage(config.welcome.image)
                     .setFooter({ text: config.welcome.footer });
                 
@@ -693,7 +696,6 @@ client.on('interactionCreate', async (interaction) => {
                 }
                 
                 await interaction.reply({ 
-                    content: `**${config.welcome.title}**\n\nHey ${interaction.user}\n${config.welcome.description}`,
                     embeds: [welcomeEmbed],
                     components: components
                 });
