@@ -105,6 +105,10 @@ const commands = [
                 required: false
             }
         ]
+    },
+    {
+        name: 'testwelcome',
+        description: 'Probar el mensaje de bienvenida en el canal actual'
     }
 ];
 
@@ -657,6 +661,40 @@ client.on('interactionCreate', async (interaction) => {
                 }
                 
                 await handleEmbedCommand(interaction);
+            }
+
+            if (interaction.commandName === 'testwelcome') {
+                // Verificar que sea administrador
+                if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
+                    return interaction.reply({ 
+                        content: '❌ Solo los administradores pueden usar este comando.', 
+                        ephemeral: true 
+                    });
+                }
+                
+                // Crear el embed de bienvenida de prueba
+                const welcomeEmbed = new EmbedBuilder()
+                    .setColor(config.welcome.color)
+                    .setImage(config.welcome.image);
+                
+                // Crear botón para la página web
+                const components = [];
+                if (config.welcome.websiteButton && config.welcome.websiteUrl) {
+                    const row = new ActionRowBuilder()
+                        .addComponents(
+                            new ButtonBuilder()
+                                .setLabel('🌐 Website')
+                                .setURL(config.welcome.websiteUrl)
+                                .setStyle(ButtonStyle.Link)
+                        );
+                    components.push(row);
+                }
+                
+                await interaction.reply({ 
+                    content: `Hey ${interaction.user}`,
+                    embeds: [welcomeEmbed],
+                    components: components
+                });
             }
             return;
         }
