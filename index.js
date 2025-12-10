@@ -166,6 +166,7 @@ client.on('guildMemberAdd', async (member) => {
         .setColor(config.welcome.color)
         .setTitle(config.welcome.title)
         .setDescription(`Hey ${member.user}\n${config.welcome.description}`)
+        .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 256 }))
         .setImage(config.welcome.image)
         .setFooter({ text: config.welcome.footer });
     
@@ -679,6 +680,7 @@ client.on('interactionCreate', async (interaction) => {
                     .setColor(config.welcome.color)
                     .setTitle(config.welcome.title)
                     .setDescription(`Hey ${interaction.user}\n${config.welcome.description}`)
+                    .setThumbnail(interaction.user.displayAvatarURL({ dynamic: true, size: 256 }))
                     .setImage(config.welcome.image)
                     .setFooter({ text: config.welcome.footer });
                 
