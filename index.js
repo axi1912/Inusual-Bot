@@ -566,12 +566,15 @@ client.on('messageCreate', async (message) => {
     
     // Detectar si el usuario escribe "human"
     if (message.content.toLowerCase().trim() === 'human') {
-        // Buscar el rol de staff o admins
-        const staffRole = message.guild.roles.cache.find(role => 
-            role.name.toLowerCase().includes('staff') || 
-            role.name.toLowerCase().includes('admin') ||
-            role.name.toLowerCase().includes('support')
-        );
+        // Obtener los roles de staff específicos
+        const staffRole1 = message.guild.roles.cache.get(process.env.STAFF_ROLE_ID_1);
+        const staffRole2 = message.guild.roles.cache.get(process.env.STAFF_ROLE_ID_2);
+        
+        // Crear menciones de los roles
+        const mentions = [];
+        if (staffRole1) mentions.push(`${staffRole1}`);
+        if (staffRole2) mentions.push(`${staffRole2}`);
+        const mentionText = mentions.length > 0 ? mentions.join(' ') : '@Staff';
         
         const notificationEmbed = new EmbedBuilder()
             .setColor('#FF6B6B')
@@ -579,12 +582,12 @@ client.on('messageCreate', async (message) => {
                 name: 'Human Support Requested', 
                 iconURL: message.author.displayAvatarURL() 
             })
-            .setDescription(`🚨 **${message.author} has requested human support.**\n\n${staffRole ? `${staffRole}` : '@Staff'} - Please assist this customer.`)
+            .setDescription(`🚨 **${message.author} has requested human support.**\n\n${mentionText} - Please assist this customer.`)
             .setFooter({ text: '⚡ Priority Support Request' })
             .setTimestamp();
         
         await message.channel.send({ 
-            content: staffRole ? `${staffRole}` : '@here',
+            content: mentionText,
             embeds: [notificationEmbed] 
         });
         
