@@ -549,6 +549,50 @@ async function handleEmbedCommand(interaction) {
     }
 }
 
+// ==================== DETECTOR DE "HUMAN" EN TICKETS ====================
+client.on('messageCreate', async (message) => {
+    // Ignorar mensajes del bot
+    if (message.author.bot) return;
+    
+    // Verificar si el mensaje es en un canal de ticket
+    const isTicketChannel = message.channel.name && (
+        message.channel.name.startsWith('purchase-') || 
+        message.channel.name.startsWith('tokens-') ||
+        message.channel.name.startsWith('afk-') ||
+        message.channel.name.startsWith('hwid-')
+    );
+    
+    if (!isTicketChannel) return;
+    
+    // Detectar si el usuario escribe "human"
+    if (message.content.toLowerCase().trim() === 'human') {
+        // Buscar el rol de staff o admins
+        const staffRole = message.guild.roles.cache.find(role => 
+            role.name.toLowerCase().includes('staff') || 
+            role.name.toLowerCase().includes('admin') ||
+            role.name.toLowerCase().includes('support')
+        );
+        
+        const notificationEmbed = new EmbedBuilder()
+            .setColor('#FF6B6B')
+            .setAuthor({ 
+                name: 'Human Support Requested', 
+                iconURL: message.author.displayAvatarURL() 
+            })
+            .setDescription(`🚨 **${message.author} has requested human support.**\n\n${staffRole ? `${staffRole}` : '@Staff'} - Please assist this customer.`)
+            .setFooter({ text: '⚡ Priority Support Request' })
+            .setTimestamp();
+        
+        await message.channel.send({ 
+            content: staffRole ? `${staffRole}` : '@here',
+            embeds: [notificationEmbed] 
+        });
+        
+        // Confirmar al usuario
+        await message.reply('✅ **A staff member has been notified and will assist you shortly!**');
+    }
+});
+
 // Manejo ÚNICO de todas las interacciones
 client.on('interactionCreate', async (interaction) => {
     try {
@@ -1080,6 +1124,19 @@ async function handleTicketCreation(interaction, type = 'boost', selectedPackage
             embeds: [welcomeEmbed], 
             components: components
         });
+
+        // Mensaje automático del bot agente
+        const botAgentEmbed = new EmbedBuilder()
+            .setColor('#00D9A3')
+            .setAuthor({ 
+                name: 'Factory Bot Assistant', 
+                iconURL: client.user.displayAvatarURL() 
+            })
+            .setDescription('👋 **Hello! Thank you for opening a ticket.**\n\nI\'m here to help you get started. Our team will assist you shortly.\n\n💡 **Need immediate human support?**\nSimply type `human` and a staff member will be notified right away.')
+            .setFooter({ text: '🤖 Automated Assistant • Factory Boosts' })
+            .setTimestamp();
+
+        await ticketChannel.send({ embeds: [botAgentEmbed] });
 
         await interaction.editReply({ 
             content: `✅ Tu ticket ha sido creado: ${ticketChannel}` 
