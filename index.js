@@ -35,6 +35,10 @@ const commands = [
         description: 'Configurar el panel de AFK Tool'
     },
     {
+        name: 'setup-lobby',
+        description: 'Configurar el panel de Bot Lobby Tool'
+    },
+    {
         name: 'setup-welcome',
         description: 'Configurar el sistema de bienvenida',
         options: [
@@ -381,6 +385,48 @@ async function setupAFKPanel(channel) {
     await channel.send({ embeds: [embed], components: [row] });
 }
 
+// Función para crear el panel de Bot Lobby Tool
+async function setupLobbyPanel(channel) {
+    const embed = new EmbedBuilder()
+        .setColor('#9B59B6')
+        .setTitle('🎯 BOT LOBBY TOOL')
+        .setDescription('━━━━━━━━━━━━━━━━━━━━━━━━━\n**Professional Lobby Management System**\n\nStreamline your game lobbies with our advanced automation tool.')
+        .addFields(
+            {
+                name: '\n✨ PREMIUM FEATURES\n',
+                value: '```yaml\n• Automated Lobby Creation\n• Smart Player Management\n• Real-time Synchronization\n• Custom Configuration\n• Advanced Security\n```',
+                inline: false
+            },
+            {
+                name: '\n🚀 CAPABILITIES\n',
+                value: '```fix\n• Multi-platform Support\n• 24/7 Uptime Guarantee\n• Instant Setup\n• Priority Support\n• Regular Updates\n```',
+                inline: false
+            },
+            {
+                name: '\n💎 WHY CHOOSE US?\n',
+                value: '• **Reliable** - Proven track record\n• **Secure** - Enterprise-grade security\n• **Fast** - Instant deployment\n• **Support** - Dedicated assistance\n• **Updates** - Continuous improvements',
+                inline: false
+            },
+            {
+                name: '\n📞 GET STARTED\n',
+                value: 'Click the button below to create a ticket and get your Bot Lobby Tool',
+                inline: false
+            }
+        )
+        .setFooter({ text: '🎯 Factory Tools • Premium Lobby Solutions' })
+        .setTimestamp();
+
+    const row = new ActionRowBuilder()
+        .addComponents(
+            new ButtonBuilder()
+                .setCustomId('create_ticket_lobby')
+                .setLabel('🎯 Purchase Bot Lobby Tool')
+                .setStyle(ButtonStyle.Success)
+        );
+
+    await channel.send({ embeds: [embed], components: [row] });
+}
+
 // Función para crear embeds personalizados
 async function handleEmbedCommand(interaction) {
     try {
@@ -667,6 +713,21 @@ client.on('interactionCreate', async (interaction) => {
                 await interaction.editReply({ content: '✅ Panel de AFK Tool creado correctamente!' });
             }
             
+            if (interaction.commandName === 'setup-lobby') {
+                // Verificar que sea administrador
+                if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
+                    return interaction.reply({ 
+                        content: '❌ Solo los administradores pueden usar este comando.', 
+                        ephemeral: true 
+                    });
+                }
+                
+                // Responder INMEDIATAMENTE
+                await interaction.reply({ content: '⏳ Creando panel de Bot Lobby Tool...', ephemeral: true });
+                await setupLobbyPanel(interaction.channel);
+                await interaction.editReply({ content: '✅ Panel de Bot Lobby Tool creado correctamente!' });
+            }
+            
             if (interaction.commandName === 'setup-welcome') {
                 // Verificar que sea administrador
                 if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
@@ -770,6 +831,10 @@ client.on('interactionCreate', async (interaction) => {
                 // Responder INMEDIATAMENTE
                 await interaction.reply({ content: '⏳ Creando tu ticket...', ephemeral: true });
                 await handleTicketCreation(interaction, 'afk');
+            } else if (interaction.customId === 'create_ticket_lobby') {
+                // Responder INMEDIATAMENTE
+                await interaction.reply({ content: '⏳ Creando tu ticket de Bot Lobby Tool...', ephemeral: true });
+                await handleTicketCreation(interaction, 'lobby');
             } else if (interaction.customId === 'close_ticket') {
                 await closeTicketButton(interaction);
             } else if (interaction.customId === 'close_confirm') {
@@ -910,6 +975,9 @@ async function handleTicketCreation(interaction, type = 'boost', selectedPackage
         } else if (type === 'hwid') {
             categoryId = process.env.AFK_TICKET_CATEGORY_ID || process.env.TICKET_CATEGORY_ID;
             channelName = `hwid-${interaction.user.username}`;
+        } else if (type === 'lobby') {
+            categoryId = process.env.BOT_TICKET_CATEGORY_ID || process.env.TICKET_CATEGORY_ID;
+            channelName = `lobby-${interaction.user.username}`;
         } else {
             categoryId = process.env.TICKET_CATEGORY_ID;
             channelName = `purchase-${interaction.user.username}`;
@@ -965,7 +1033,7 @@ async function handleTicketCreation(interaction, type = 'boost', selectedPackage
 
         // Guardar en base de datos JSON
         const ticketId = Math.floor(Math.random() * 9000) + 1000;
-        const ticketType = type === 'bot' ? 'Custom Bot' : type === 'nitro' ? 'Nitro Token' : type === 'afk' ? 'AFK Tool' : type === 'hwid' ? 'HWID Reset' : 'Boost';
+        const ticketType = type === 'bot' ? 'Custom Bot' : type === 'nitro' ? 'Nitro Token' : type === 'afk' ? 'AFK Tool' : type === 'hwid' ? 'HWID Reset' : type === 'lobby' ? 'Bot Lobby Tool' : 'Boost';
         db.addTicket({
             id: ticketId,
             channelId: ticketChannel.id,
@@ -1083,6 +1151,26 @@ async function handleTicketCreation(interaction, type = 'boost', selectedPackage
                     .setTimestamp();
 
                 selectMenu = null; // No hay menú para HWID reset
+            } else if (type === 'lobby') {
+                welcomeEmbed = new EmbedBuilder()
+                    .setColor('#9B59B6')
+                    .setTitle('🎫 Ticket Created - Bot Lobby Tool')
+                    .setDescription(`Hello ${interaction.user}! Thank you for your interest in our **Bot Lobby Tool**.\n\n✨ **Premium Lobby Management System**\n\nA staff member will assist you shortly with the setup and payment details.`)
+                    .addFields(
+                        {
+                            name: '📋 What to expect:',
+                            value: '• Detailed product information\n• Custom configuration options\n• Payment instructions\n• Instant setup after payment\n• Dedicated support',
+                            inline: false
+                        },
+                        {
+                            name: '⚡ Next Steps:',
+                            value: 'Our team will provide you with all the information and guide you through the process.',
+                            inline: false
+                        }
+                    )
+                    .setTimestamp();
+
+                selectMenu = null; // No hay menú para Bot Lobby Tool
             } else {
                 welcomeEmbed = new EmbedBuilder()
                     .setColor('#00D9A3')
