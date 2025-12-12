@@ -326,8 +326,8 @@ async function setupLobbyPanel(channel) {
         .addComponents(
             new ButtonBuilder()
                 .setCustomId('create_ticket_lobby')
-                .setLabel('🎯 Purchase Bot Lobby Tool')
-                .setStyle(ButtonStyle.Success)
+                .setLabel('🎯 Bot Lobby Tool')
+                .setStyle(ButtonStyle.Secondary)
         );
 
     await channel.send({ embeds: [embed], components: [row] });
