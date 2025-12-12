@@ -204,25 +204,8 @@ client.on('guildMemberAdd', async (member) => {
 async function setupTicketPanel(channel) {
     const embed = new EmbedBuilder()
         .setColor('#00D9A3')
-        .setTitle('FACTORY BOOSTS - SERVER BOOSTS')
-        .setDescription('━━━━━━━━━━━━━━━━━━━━━━━━━')
-        .addFields(
-            {
-                name: '\n🟢 1 MONTH SERVER BOOSTS\n',
-                value: '```fix\n• 6 Server Boosts  → 5$\n• 8 Server Boosts  → 7$\n• 14 Server Boosts → 11$\n```',
-                inline: false
-            },
-            {
-                name: '\n� 3 MONTH SERVER BOOSTS\n',
-                value: '```fix\n• 6 Server Boosts  → 15$\n• 8 Server Boosts  → 20$\n• 14 Server Boosts → 35$\n```',
-                inline: false
-            },
-            {
-                name: '\n📋 INSTRUCTIONS\n',
-                value: '» Select a package from the menu below\n» Your ticket will be created automatically\n» A staff member will assist you\n» Read the terms before proceeding',
-                inline: false
-            }
-        )
+        .setTitle('Server Boosts')
+        .setDescription('**Boost your Discord server with our reliable service.**\n\nChoose from 1 Month or 3 Month durations.\nPackages available: 6, 8, or 14 boosts.\n\nPrices starting at $5 for 1 month.\nSelect your package below to create a ticket.')
         .setImage('https://cdn.discordapp.com/attachments/1309783318031503384/1447815600905916538/NITRO_BOOSTS.gif?ex=6938feda&is=6937ad5a&hm=b800e00ab3b7326b1209675bce9b5abdc5f7ca3a1304dc56d6e0911ae3ae72e8&')
         .setFooter({ text: '👑 Factory Boosts • Trusted Service' })
         .setTimestamp();
@@ -248,25 +231,8 @@ async function setupTicketPanel(channel) {
 async function setupBotsPanel(channel) {
     const embed = new EmbedBuilder()
         .setColor('#00D9A3')
-        .setTitle('🤖 CUSTOM DISCORD BOTS')
-        .setDescription('━━━━━━━━━━━━━━━━━━━━━━━━━')
-        .addFields(
-            {
-                name: '\n📋 ABOUT\n',
-                value: '```fix\nProfessional Discord Bot Development\nWe create custom bots tailored to your\nserver needs! Any feature, any\nfunctionality, fully customized.\n```',
-                inline: false
-            },
-            {
-                name: '\n💰 PRICING\n',
-                value: '```fix\n• Basic Bot      → Starting at 15$\n• Advanced Bot   → Starting at 30$\n• Premium Bot    → Starting at 50$\n• Custom Quote   → Contact us\n```',
-                inline: false
-            },
-            {
-                name: '\n\n📦 WHAT\'S INCLUDED\n',
-                value: '```fix\n• Basic    → Simple commands & moderation\n• Advanced → Multiple systems & economy\n• Premium  → Full customization & features\n• Custom   → Unique & complex projects\n```',
-                inline: false
-            }
-        )
+        .setTitle('Custom Discord Bots')
+        .setDescription('**Professional bot development tailored to your needs.**\n\nWe create custom bots with any features you want.\nFrom simple moderation to complex systems.\n\nPrices start at $15 for basic bots.\nSelect the type that fits your project below.')
         .setImage('https://cdn.discordapp.com/attachments/1309783318031503384/1447815599957872793/CUSTOM_BOTS.gif?ex=6938feda&is=6937ad5a&hm=2e541bad78f18481c616c26b07bc4c22c74c424ff9670d342390f80c7661bcf8&')
         .setFooter({ text: '🤖 Factory Development • Quality Custom Bots' });
 
@@ -290,26 +256,9 @@ async function setupBotsPanel(channel) {
 // Función para crear el panel de Nitro Tokens
 async function setupNitroPanel(channel) {
     const embed = new EmbedBuilder()
-        .setColor('#00D9A3')
-        .setTitle('💎 DISCORD NITRO TOKENS')
-        .setDescription('━━━━━━━━━━━━━━━━━━━━━━━━━')
-        .addFields(
-            {
-                name: '\n💜 NITRO PRICING\n',
-                value: '```fix\n• 1 Month Nitro  → 1.50$\n• 3 Months Nitro → 4.00$\n```',
-                inline: false
-            },
-            {
-                name: '\n💳 PAYMENT METHODS\n',
-                value: '<:807644paypal:1436584262479384707> **PayPal**\n<:binance:1436591160285073408> **Binance**',
-                inline: false
-            },
-            {
-                name: '\n📋 INSTRUCTIONS\n',
-                value: '» Click the **"Buy Nitro"** button\n» Select the duration you want\n» A staff member will process your order\n» Receive your Nitro Token instantly',
-                inline: false
-            }
-        )
+        .setColor('#5865F2')
+        .setTitle('Discord Nitro Tokens')
+        .setDescription('**Get Discord Nitro at affordable prices.**\n\nReceive your token instantly after payment.\nWorks with any Discord account.\n\n1 Month - $1.50\n3 Months - $4.00\n\nSelect your duration below to get started.')
         .setImage('https://cdn.discordapp.com/attachments/1309783318031503384/1447815600461316106/NITRO_TOKENS.gif?ex=6938feda&is=6937ad5a&hm=17ca989428bcd27ad6b735f7cad7e8b686fbb691ae62c07fa7410f1a4c62feb8&')
         .setFooter({ text: '💎 Factory Boosts • Instant Delivery' })
         .setTimestamp();
@@ -335,30 +284,8 @@ async function setupNitroPanel(channel) {
 async function setupAFKPanel(channel) {
     const embed = new EmbedBuilder()
         .setColor('#00D9A3')
-        .setTitle('🎮 AFK TOOL - GAME FARMING')
-        .setDescription('━━━━━━━━━━━━━━━━━━━━━━━━━')
-        .addFields(
-            {
-                name: '\n⏰ SUBSCRIPTION PLANS\n',
-                value: '```fix\n• 7 Days      → 5$\n• 30 Days     → 15$\n• 90 Days     → 35$\n• Lifetime    → 50$\n```',
-                inline: false
-            },
-            {
-                name: '\n🔄 HWID RESET\n',
-                value: '```fix\n• Reset your Hardware ID\n```',
-                inline: false
-            },
-            {
-                name: '\n📋 WHAT YOU GET\n',
-                value: '• Automated game farming\n• Safe and undetectable\n• Fast rank progression\n• 24/7 support\n• Money back guarantee',
-                inline: false
-            },
-            {
-                name: '\n📞 HOW TO ORDER\n',
-                value: 'Select an option from the menu below to create a ticket',
-                inline: false
-            }
-        )
+        .setTitle('AFK Tool - Game Farming')
+        .setDescription('**Automated game farming made easy.**\n\nSafe, undetectable, and fast rank progression.\n24/7 support and money back guarantee.\n\nSubscriptions: 7 days ($5) to Lifetime ($50)\nHWID Reset service also available.\n\nSelect a service below to get started.')
         .setImage('https://cdn.discordapp.com/attachments/1309783318031503384/1447989195451797646/AFK_TOOL.gif?ex=6939a086&is=69384f06&hm=42cc46c563fa61cabe48d8914edbe60123cf51832818867eb078ece099e543be&')
         .setFooter({ text: '🎮 Factory Tools • Professional AFK Service' })
         .setTimestamp();
@@ -389,30 +316,8 @@ async function setupAFKPanel(channel) {
 async function setupLobbyPanel(channel) {
     const embed = new EmbedBuilder()
         .setColor('#9B59B6')
-        .setTitle('🎯 BOT LOBBY TOOL')
-        .setDescription('━━━━━━━━━━━━━━━━━━━━━━━━━\n**Professional Lobby Management System**\n\nStreamline your game lobbies with our advanced automation tool.')
-        .addFields(
-            {
-                name: '\n✨ PREMIUM FEATURES\n',
-                value: '```yaml\n• Automated Lobby Creation\n• Smart Player Management\n• Real-time Synchronization\n• Custom Configuration\n• Advanced Security\n```',
-                inline: false
-            },
-            {
-                name: '\n🚀 CAPABILITIES\n',
-                value: '```fix\n• Multi-platform Support\n• 24/7 Uptime Guarantee\n• Instant Setup\n• Priority Support\n• Regular Updates\n```',
-                inline: false
-            },
-            {
-                name: '\n💎 WHY CHOOSE US?\n',
-                value: '• **Reliable** - Proven track record\n• **Secure** - Enterprise-grade security\n• **Fast** - Instant deployment\n• **Support** - Dedicated assistance\n• **Updates** - Continuous improvements',
-                inline: false
-            },
-            {
-                name: '\n📞 GET STARTED\n',
-                value: 'Click the button below to create a ticket and get your Bot Lobby Tool',
-                inline: false
-            }
-        )
+        .setTitle('Bot Lobby Tool')
+        .setDescription('**Professional lobby management system for your game.**\n\nAutomated lobby creation and smart player management.\nMulti-platform support with 24/7 uptime guarantee.\n\nEnterprise-grade security and instant setup.\nDedicated priority support included.\n\nClick below to create a ticket and get started.')
         .setFooter({ text: '🎯 Factory Tools • Premium Lobby Solutions' })
         .setTimestamp();
 
