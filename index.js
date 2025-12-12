@@ -511,7 +511,8 @@ client.on('messageCreate', async (message) => {
         message.channel.name.startsWith('purchase-') || 
         message.channel.name.startsWith('tokens-') ||
         message.channel.name.startsWith('afk-') ||
-        message.channel.name.startsWith('hwid-')
+        message.channel.name.startsWith('hwid-') ||
+        message.channel.name.startsWith('lobby-')
     );
     
     if (!isTicketChannel) return;
