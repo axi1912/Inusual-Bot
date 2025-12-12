@@ -867,26 +867,21 @@ async function handleTicketCreation(interaction, type = 'boost', selectedPackage
 
     try {
         // Determinar la categoría y nombre según el tipo de ticket
-        let categoryId;
+        // Todos los tickets van a la misma categoría
+        const categoryId = '1447619352781389954';
         let channelName;
         
         if (type === 'nitro') {
-            categoryId = '1438409406604644407'; // Categoría específica para tokens
-            channelName = `tokens-${interaction.user.username}`; // Nombre temporal, se actualizará después
+            channelName = `tokens-${interaction.user.username}`;
         } else if (type === 'bot') {
-            categoryId = process.env.BOT_TICKET_CATEGORY_ID;
             channelName = `purchase-${interaction.user.username}`;
         } else if (type === 'afk') {
-            categoryId = process.env.AFK_TICKET_CATEGORY_ID || process.env.TICKET_CATEGORY_ID;
             channelName = `afk-${interaction.user.username}`;
         } else if (type === 'hwid') {
-            categoryId = process.env.AFK_TICKET_CATEGORY_ID || process.env.TICKET_CATEGORY_ID;
             channelName = `hwid-${interaction.user.username}`;
         } else if (type === 'lobby') {
-            categoryId = process.env.BOT_TICKET_CATEGORY_ID || process.env.TICKET_CATEGORY_ID;
             channelName = `lobby-${interaction.user.username}`;
         } else {
-            categoryId = process.env.TICKET_CATEGORY_ID;
             channelName = `purchase-${interaction.user.username}`;
         }
         
