@@ -900,7 +900,8 @@ async function handleTicketCreation(interaction, type = 'boost', selectedPackage
                     allow: [
                         PermissionFlagsBits.ViewChannel,
                         PermissionFlagsBits.SendMessages,
-                        PermissionFlagsBits.ReadMessageHistory
+                        PermissionFlagsBits.ReadMessageHistory,
+                        PermissionFlagsBits.AttachFiles
                     ]
                 },
                 {
@@ -923,7 +924,8 @@ async function handleTicketCreation(interaction, type = 'boost', selectedPackage
             await ticketChannel.permissionOverwrites.create(memberId, {
                 ViewChannel: true,
                 SendMessages: true,
-                ReadMessageHistory: true
+                ReadMessageHistory: true,
+                AttachFiles: true
             });
         }
 
