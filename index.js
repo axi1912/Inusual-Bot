@@ -290,7 +290,6 @@ async function setupAFKPanel(channel) {
         .setColor('#00D9A3')
         .setTitle('AFK Tool - Game Farming')
         .setDescription('**Automated game farming made easy.**\n\nSafe, undetectable, and fast rank progression.\n24/7 support included.\n\nSubscriptions: 7 days ($5) to Lifetime ($50)\n\nClick below to create a ticket and get started.')
-        .setImage('https://cdn.discordapp.com/attachments/1309783318031503384/1447989195451797646/AFK_TOOL.gif?ex=6939a086&is=69384f06&hm=42cc46c563fa61cabe48d8914edbe60123cf51832818867eb078ece099e543be&')
         .setFooter({ text: '🎮 Factory Tools • Professional AFK Service' })
         .setTimestamp();
 
@@ -311,7 +310,6 @@ async function setupHWIDPanel(channel) {
         .setColor('#E74C3C')
         .setTitle('🔄 HWID Reset Service')
         .setDescription('**Reset your Hardware ID instantly.**\n\nCompatible with AFK Tool and Bot Lobby Tool.\nQuick and secure HWID reset process.\n\nService available 24/7 with immediate processing.\nSupport for multiple tools and platforms.\n\nClick below to create a ticket and request a reset.')
-        .setImage('https://cdn.discordapp.com/attachments/1309783318031503384/1447989195451797646/AFK_TOOL.gif?ex=6939a086&is=69384f06&hm=42cc46c563fa61cabe48d8914edbe60123cf51832818867eb078ece099e543be&')
         .setFooter({ text: '🔄 Factory Tools • HWID Reset Service' })
         .setTimestamp();
 
@@ -332,7 +330,6 @@ async function setupLobbyPanel(channel) {
         .setColor('#9B59B6')
         .setTitle('Bot Lobby Tool')
         .setDescription('**Professional lobby management system for your game.**\n\nAutomated lobby creation and smart player management.\nMulti-platform support with 24/7 uptime guarantee.\n\nEnterprise-grade security and instant setup.\nDedicated priority support included.\n\nClick below to create a ticket and get started.')
-        .setImage('https://cdn.discordapp.com/attachments/1309783318031503384/1448176145768910909/FACTORY_BANNER_VERDE.gif?ex=693c48e2&is=693af762&hm=f49a5cf007cfbd41a248de0f537c694abd48082be6cc2ad20784389f42e10b94&')
         .setFooter({ text: '🎯 Factory Tools • Premium Lobby Solutions' })
         .setTimestamp();
 
