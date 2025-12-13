@@ -39,6 +39,10 @@ const commands = [
         description: 'Configurar el panel de Bot Lobby Tool'
     },
     {
+        name: 'setup-hwid',
+        description: 'Configurar el panel de HWID Reset'
+    },
+    {
         name: 'setup-welcome',
         description: 'Configurar el sistema de bienvenida',
         options: [
@@ -285,28 +289,38 @@ async function setupAFKPanel(channel) {
     const embed = new EmbedBuilder()
         .setColor('#00D9A3')
         .setTitle('AFK Tool - Game Farming')
-        .setDescription('**Automated game farming made easy.**\n\nSafe, undetectable, and fast rank progression.\n24/7 support included.\n\nSubscriptions: 7 days ($5) to Lifetime ($50)\nHWID Reset service also available.\n\nSelect a service below to get started.')
+        .setDescription('**Automated game farming made easy.**\n\nSafe, undetectable, and fast rank progression.\n24/7 support included.\n\nSubscriptions: 7 days ($5) to Lifetime ($50)\n\nClick below to create a ticket and get started.')
         .setImage('https://cdn.discordapp.com/attachments/1309783318031503384/1447989195451797646/AFK_TOOL.gif?ex=6939a086&is=69384f06&hm=42cc46c563fa61cabe48d8914edbe60123cf51832818867eb078ece099e543be&')
         .setFooter({ text: '🎮 Factory Tools • Professional AFK Service' })
         .setTimestamp();
 
     const row = new ActionRowBuilder()
         .addComponents(
-            new StringSelectMenuBuilder()
-                .setCustomId('afk_service_menu')
-                .setPlaceholder('Select a service')
-                .addOptions([
-                    {
-                        label: '🎮 AFK Tool',
-                        description: 'Purchase AFK Tool farming service',
-                        value: 'afk_tool'
-                    },
-                    {
-                        label: '🔄 HWID Reset',
-                        description: 'Reset your Hardware ID',
-                        value: 'hwid_reset'
-                    }
-                ])
+            new ButtonBuilder()
+                .setCustomId('create_ticket_afk')
+                .setLabel('🎮 AFK Tool')
+                .setStyle(ButtonStyle.Success)
+        );
+
+    await channel.send({ embeds: [embed], components: [row] });
+}
+
+// Función para crear el panel de HWID Reset
+async function setupHWIDPanel(channel) {
+    const embed = new EmbedBuilder()
+        .setColor('#E74C3C')
+        .setTitle('🔄 HWID Reset Service')
+        .setDescription('**Reset your Hardware ID instantly.**\n\nCompatible with AFK Tool and Bot Lobby Tool.\nQuick and secure HWID reset process.\n\nService available 24/7 with immediate processing.\nSupport for multiple tools and platforms.\n\nClick below to create a ticket and request a reset.')
+        .setImage('https://cdn.discordapp.com/attachments/1309783318031503384/1447989195451797646/AFK_TOOL.gif?ex=6939a086&is=69384f06&hm=42cc46c563fa61cabe48d8914edbe60123cf51832818867eb078ece099e543be&')
+        .setFooter({ text: '🔄 Factory Tools • HWID Reset Service' })
+        .setTimestamp();
+
+    const row = new ActionRowBuilder()
+        .addComponents(
+            new ButtonBuilder()
+                .setCustomId('create_ticket_hwid')
+                .setLabel('🔄 HWID Reset')
+                .setStyle(ButtonStyle.Danger)
         );
 
     await channel.send({ embeds: [embed], components: [row] });
@@ -635,6 +649,21 @@ client.on('interactionCreate', async (interaction) => {
                 await interaction.editReply({ content: '✅ Panel de Bot Lobby Tool creado correctamente!' });
             }
             
+            if (interaction.commandName === 'setup-hwid') {
+                // Verificar que sea administrador
+                if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
+                    return interaction.reply({ 
+                        content: '❌ Solo los administradores pueden usar este comando.', 
+                        ephemeral: true 
+                    });
+                }
+                
+                // Responder INMEDIATAMENTE
+                await interaction.reply({ content: '⏳ Creando panel de HWID Reset...', ephemeral: true });
+                await setupHWIDPanel(interaction.channel);
+                await interaction.editReply({ content: '✅ Panel de HWID Reset creado correctamente!' });
+            }
+            
             if (interaction.commandName === 'setup-welcome') {
                 // Verificar que sea administrador
                 if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
@@ -742,6 +771,10 @@ client.on('interactionCreate', async (interaction) => {
                 // Responder INMEDIATAMENTE
                 await interaction.reply({ content: '⏳ Creando tu ticket de Bot Lobby Tool...', ephemeral: true });
                 await handleTicketCreation(interaction, 'lobby');
+            } else if (interaction.customId === 'create_ticket_hwid') {
+                // Responder INMEDIATAMENTE
+                await interaction.reply({ content: '⏳ Creando tu ticket de HWID Reset...', ephemeral: true });
+                await handleTicketCreation(interaction, 'hwid');
             } else if (interaction.customId === 'close_ticket') {
                 await closeTicketButton(interaction);
             } else if (interaction.customId === 'close_confirm') {
@@ -814,17 +847,6 @@ client.on('interactionCreate', async (interaction) => {
             } else if (interaction.customId === 'nitro_panel_menu') {
                 await interaction.reply({ content: '⏳ Creando tu ticket...', ephemeral: true });
                 await handleTicketCreation(interaction, 'nitro', interaction.values[0]);
-            } else if (interaction.customId === 'afk_service_menu') {
-                // Handler del menú de servicios de AFK
-                const selectedService = interaction.values[0];
-                
-                if (selectedService === 'afk_tool') {
-                    await interaction.reply({ content: '⏳ Creando tu ticket de AFK Tool...', ephemeral: true });
-                    await handleTicketCreation(interaction, 'afk');
-                } else if (selectedService === 'hwid_reset') {
-                    await interaction.reply({ content: '⏳ Creando tu ticket de HWID Reset...', ephemeral: true });
-                    await handleTicketCreation(interaction, 'hwid');
-                }
             }
             // Menús DENTRO de los tickets (selección de paquetes)
             else if (interaction.customId === 'select_boost_package') {
@@ -867,21 +889,26 @@ async function handleTicketCreation(interaction, type = 'boost', selectedPackage
 
     try {
         // Determinar la categoría y nombre según el tipo de ticket
-        // Todos los tickets van a la misma categoría
-        const categoryId = '1447619352781389954';
+        let categoryId;
         let channelName;
         
-        if (type === 'nitro') {
+        if (type === 'hwid') {
+            categoryId = '1449485462967423136'; // Categoría específica para HWID Reset
+            channelName = `hwid-${interaction.user.username}`;
+        } else if (type === 'nitro') {
+            categoryId = '1447619352781389954'; // Categoría general
             channelName = `tokens-${interaction.user.username}`;
         } else if (type === 'bot') {
+            categoryId = '1447619352781389954'; // Categoría general
             channelName = `purchase-${interaction.user.username}`;
         } else if (type === 'afk') {
+            categoryId = '1447619352781389954'; // Categoría general
             channelName = `afk-${interaction.user.username}`;
-        } else if (type === 'hwid') {
-            channelName = `hwid-${interaction.user.username}`;
         } else if (type === 'lobby') {
+            categoryId = '1447619352781389954'; // Categoría general
             channelName = `lobby-${interaction.user.username}`;
         } else {
+            categoryId = '1447619352781389954'; // Categoría general
             channelName = `purchase-${interaction.user.username}`;
         }
         
