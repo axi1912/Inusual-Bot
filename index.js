@@ -299,7 +299,7 @@ async function setupAFKPanel(channel) {
             new ButtonBuilder()
                 .setCustomId('create_ticket_afk')
                 .setLabel('🎮 AFK Tool')
-                .setStyle(ButtonStyle.Success)
+                .setStyle(ButtonStyle.Secondary)
         );
 
     await channel.send({ embeds: [embed], components: [row] });
@@ -320,7 +320,7 @@ async function setupHWIDPanel(channel) {
             new ButtonBuilder()
                 .setCustomId('create_ticket_hwid')
                 .setLabel('🔄 HWID Reset')
-                .setStyle(ButtonStyle.Danger)
+                .setStyle(ButtonStyle.Secondary)
         );
 
     await channel.send({ embeds: [embed], components: [row] });
