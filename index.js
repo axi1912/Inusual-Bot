@@ -1161,6 +1161,40 @@ async function handleTicketCreation(interaction, type = 'boost', selectedPackage
             content: `✅ Tu ticket ha sido creado: ${ticketChannel}` 
         });
 
+        // Enviar notificación al canal de logs cuando se crea el ticket
+        if (process.env.STAFF_LOG_CHANNEL_ID) {
+            try {
+                const logChannel = await interaction.guild.channels.fetch(process.env.STAFF_LOG_CHANNEL_ID);
+                
+                const ticketTypeNames = {
+                    'boost': 'Factory Boosts',
+                    'bot': 'Custom Bots',
+                    'nitro': 'Nitro Tokens',
+                    'afk': 'AFK Tool',
+                    'lobby': 'Bot Lobby Tool',
+                    'hwid': 'HWID Reset'
+                };
+
+                const logEmbed = new EmbedBuilder()
+                    .setColor(config.colors.primary)
+                    .setTitle('🎫 Nuevo Ticket Creado')
+                    .setDescription(`Un usuario ha abierto un nuevo ticket`)
+                    .addFields(
+                        { name: '👤 Usuario', value: `${interaction.user} (${interaction.user.tag})`, inline: true },
+                        { name: '📋 Tipo', value: ticketTypeNames[type] || type, inline: true },
+                        { name: '🎫 Canal', value: `${ticketChannel}`, inline: false },
+                        { name: '🆔 Ticket ID', value: `#${ticketNumber}`, inline: true }
+                    )
+                    .setThumbnail(interaction.user.displayAvatarURL())
+                    .setFooter({ text: `User ID: ${interaction.user.id}` })
+                    .setTimestamp();
+
+                await logChannel.send({ embeds: [logEmbed] });
+            } catch (error) {
+                console.error('Error al enviar notificación al canal de logs:', error);
+            }
+        }
+
     } catch (error) {
         console.error('Error al crear ticket:', error);
         try {
@@ -1441,6 +1475,14 @@ async function handleAFKSelection(interaction) {
 
 // Cerrar ticket con botón
 async function closeTicketButton(interaction) {
+    // Verificar que solo los administradores puedan cerrar tickets
+    if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
+        return interaction.reply({
+            content: '❌ Solo los administradores pueden cerrar tickets.',
+            ephemeral: true
+        });
+    }
+
     const confirmEmbed = new EmbedBuilder()
         .setColor(config.colors.warning)
         .setTitle('⚠️ Confirmar Cierre de Ticket')
@@ -1463,6 +1505,15 @@ async function closeTicketButton(interaction) {
 
 // Confirmar cierre de ticket
 async function confirmCloseTicket(interaction) {
+    // Verificar que solo los administradores puedan cerrar tickets
+    if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
+        return interaction.update({
+            content: '❌ Solo los administradores pueden cerrar tickets.',
+            embeds: [],
+            components: []
+        });
+    }
+
     await interaction.update({ content: '🔒 Cerrando ticket...', embeds: [], components: [] });
 
     const channel = interaction.channel;
@@ -1495,13 +1546,9 @@ async function confirmCloseTicket(interaction) {
 
 // Cerrar ticket con comando
 async function closeTicket(channel, member) {
-    // Verificar permisos
-    const ticketData = activeTickets.get(channel.id);
-    const hasPermission = member.permissions.has(PermissionFlagsBits.ManageChannels) || 
-                          (ticketData && ticketData.userId === member.id);
-
-    if (!hasPermission) {
-        return channel.send('❌ No tienes permiso para cerrar este ticket.');
+    // Verificar que solo los administradores puedan cerrar tickets
+    if (!member.permissions.has(PermissionFlagsBits.Administrator)) {
+        return channel.send('❌ Solo los administradores pueden cerrar tickets.');
     }
 
     const closingEmbed = new EmbedBuilder()
