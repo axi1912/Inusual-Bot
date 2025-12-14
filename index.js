@@ -43,6 +43,10 @@ const commands = [
         description: 'Configurar el panel de HWID Reset'
     },
     {
+        name: 'setup-designs',
+        description: 'Configurar el panel de Discord Designs'
+    },
+    {
         name: 'setup-welcome',
         description: 'Configurar el sistema de bienvenida',
         options: [
@@ -318,6 +322,26 @@ async function setupHWIDPanel(channel) {
             new ButtonBuilder()
                 .setCustomId('create_ticket_hwid')
                 .setLabel('🔄 HWID Reset')
+                .setStyle(ButtonStyle.Secondary)
+        );
+
+    await channel.send({ embeds: [embed], components: [row] });
+}
+
+// Función para crear el panel de Discord Designs
+async function setupDesignsPanel(channel) {
+    const embed = new EmbedBuilder()
+        .setColor('#F1C40F')
+        .setTitle('🎨 Discord Designs Service')
+        .setDescription('**Professional Discord server designs.**\n\nCustom banners, icons, and complete server themes.\nProfessional emojis and stickers design.\n\nFast delivery with unlimited revisions.\nUnique designs tailored to your brand.\n\nClick below to create a ticket and request a design.')
+        .setFooter({ text: '🎨 Factory Discord Designs' })
+        .setTimestamp();
+
+    const row = new ActionRowBuilder()
+        .addComponents(
+            new ButtonBuilder()
+                .setCustomId('create_ticket_designs')
+                .setLabel('🎨 Discord Designs')
                 .setStyle(ButtonStyle.Secondary)
         );
 
@@ -661,6 +685,21 @@ client.on('interactionCreate', async (interaction) => {
                 await interaction.editReply({ content: '✅ Panel de HWID Reset creado correctamente!' });
             }
             
+            if (interaction.commandName === 'setup-designs') {
+                // Verificar que sea administrador
+                if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
+                    return interaction.reply({ 
+                        content: '❌ Solo los administradores pueden usar este comando.', 
+                        ephemeral: true 
+                    });
+                }
+                
+                // Responder INMEDIATAMENTE
+                await interaction.reply({ content: '⏳ Creando panel de Discord Designs...', ephemeral: true });
+                await setupDesignsPanel(interaction.channel);
+                await interaction.editReply({ content: '✅ Panel de Discord Designs creado correctamente!' });
+            }
+            
             if (interaction.commandName === 'setup-welcome') {
                 // Verificar que sea administrador
                 if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
@@ -772,6 +811,10 @@ client.on('interactionCreate', async (interaction) => {
                 // Responder INMEDIATAMENTE
                 await interaction.reply({ content: '⏳ Creando tu ticket de HWID Reset...', ephemeral: true });
                 await handleTicketCreation(interaction, 'hwid');
+            } else if (interaction.customId === 'create_ticket_designs') {
+                // Responder INMEDIATAMENTE
+                await interaction.reply({ content: '⏳ Creando tu ticket de Discord Designs...', ephemeral: true });
+                await handleTicketCreation(interaction, 'designs');
             } else if (interaction.customId === 'close_ticket') {
                 await closeTicketButton(interaction);
             } else if (interaction.customId === 'close_confirm') {
@@ -904,6 +947,9 @@ async function handleTicketCreation(interaction, type = 'boost', selectedPackage
         } else if (type === 'lobby') {
             categoryId = '1447619352781389954'; // Categoría general
             channelName = `lobby-${interaction.user.username}`;
+        } else if (type === 'designs') {
+            categoryId = '1447619352781389954'; // Categoría general
+            channelName = `designs-${interaction.user.username}`;
         } else {
             categoryId = '1447619352781389954'; // Categoría general
             channelName = `purchase-${interaction.user.username}`;
@@ -961,7 +1007,7 @@ async function handleTicketCreation(interaction, type = 'boost', selectedPackage
 
         // Guardar en base de datos JSON
         const ticketId = Math.floor(Math.random() * 9000) + 1000;
-        const ticketType = type === 'bot' ? 'Custom Bot' : type === 'nitro' ? 'Nitro Token' : type === 'afk' ? 'AFK Tool' : type === 'hwid' ? 'HWID Reset' : type === 'lobby' ? 'Bot Lobby Tool' : 'Boost';
+        const ticketType = type === 'bot' ? 'Custom Bot' : type === 'nitro' ? 'Nitro Token' : type === 'afk' ? 'AFK Tool' : type === 'hwid' ? 'HWID Reset' : type === 'lobby' ? 'Bot Lobby Tool' : type === 'designs' ? 'Discord Designs' : 'Boost';
         db.addTicket({
             id: ticketId,
             channelId: ticketChannel.id,
@@ -1099,6 +1145,31 @@ async function handleTicketCreation(interaction, type = 'boost', selectedPackage
                     .setTimestamp();
 
                 selectMenu = null; // No hay menú para Bot Lobby Tool
+            } else if (type === 'designs') {
+                welcomeEmbed = new EmbedBuilder()
+                    .setColor('#F1C40F')
+                    .setTitle('🎫 Ticket Created - Discord Designs')
+                    .setDescription(`Hello ${interaction.user}! Thank you for your interest in our **Discord Designs** service.\n\n🎨 **Professional Design Services**\n\nA staff member will assist you shortly with your design request.`)
+                    .addFields(
+                        {
+                            name: '📋 What we offer:',
+                            value: '• Custom server banners & icons\n• Professional emojis & stickers\n• Complete server themes\n• Logo design\n• Unique designs tailored to your brand',
+                            inline: false
+                        },
+                        {
+                            name: '⚡ What to provide:',
+                            value: '• Your design concept or idea\n• Brand colors/theme preferences\n• Reference images (if any)\n• Specific requirements',
+                            inline: false
+                        },
+                        {
+                            name: '🎯 Delivery:',
+                            value: 'Fast delivery with unlimited revisions until you\'re satisfied!',
+                            inline: false
+                        }
+                    )
+                    .setTimestamp();
+
+                selectMenu = null; // No hay menú para Discord Designs
             } else {
                 welcomeEmbed = new EmbedBuilder()
                     .setColor('#00D9A3')
