@@ -1183,7 +1183,7 @@ async function handleTicketCreation(interaction, type = 'boost', selectedPackage
                         { name: '👤 Usuario', value: `${interaction.user} (${interaction.user.tag})`, inline: true },
                         { name: '📋 Tipo', value: ticketTypeNames[type] || type, inline: true },
                         { name: '🎫 Canal', value: `${ticketChannel}`, inline: false },
-                        { name: '🆔 Ticket ID', value: `#${ticketNumber}`, inline: true }
+                        { name: '🆔 Ticket ID', value: `#${ticketId}`, inline: true }
                     )
                     .setThumbnail(interaction.user.displayAvatarURL())
                     .setFooter({ text: `User ID: ${interaction.user.id}` })
