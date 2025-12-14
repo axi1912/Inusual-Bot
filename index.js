@@ -1245,10 +1245,10 @@ async function handleBoostSelection(interaction) {
     // Responder a la interacción
     await interaction.reply({ embeds: [ticketInfoEmbed, packageEmbed] });
 
-    // Notificar al staff en canal de logs (si está configurado)
-    if (process.env.STAFF_LOG_CHANNEL_ID) {
+    // Notificar al staff en canal de logs de purchase (si está configurado)
+    if (process.env.PURCHASE_LOG_CHANNEL_ID) {
         try {
-            const logChannel = await interaction.guild.channels.fetch(process.env.STAFF_LOG_CHANNEL_ID);
+            const logChannel = await interaction.guild.channels.fetch(process.env.PURCHASE_LOG_CHANNEL_ID);
             
             const staffNotification = new EmbedBuilder()
                 .setColor(config.colors.warning)
@@ -1267,7 +1267,7 @@ async function handleBoostSelection(interaction) {
 
             await logChannel.send({ embeds: [staffNotification] });
         } catch (error) {
-            console.error('Error al enviar notificación al canal de logs:', error);
+            console.error('Error al enviar notificación al canal de logs de purchase:', error);
         }
     }
 }
@@ -1309,10 +1309,10 @@ async function handleBotSelection(interaction) {
     // Responder a la interacción
     await interaction.reply({ embeds: [ticketInfoEmbed, botEmbed] });
 
-    // Notificar al staff en canal de logs
-    if (process.env.STAFF_LOG_CHANNEL_ID) {
+    // Notificar al staff en canal de logs de purchase
+    if (process.env.PURCHASE_LOG_CHANNEL_ID) {
         try {
-            const logChannel = await interaction.guild.channels.fetch(process.env.STAFF_LOG_CHANNEL_ID);
+            const logChannel = await interaction.guild.channels.fetch(process.env.PURCHASE_LOG_CHANNEL_ID);
             
             const staffNotification = new EmbedBuilder()
                 .setColor(config.colors.warning)
@@ -1330,7 +1330,7 @@ async function handleBotSelection(interaction) {
 
             await logChannel.send({ embeds: [staffNotification] });
         } catch (error) {
-            console.error('Error al enviar notificación al canal de logs:', error);
+            console.error('Error al enviar notificación al canal de logs de purchase:', error);
         }
     }
 }
@@ -1382,10 +1382,10 @@ async function handleNitroSelection(interaction) {
     // Responder a la interacción
     await interaction.reply({ embeds: [ticketInfoEmbed, nitroEmbed] });
 
-    // Notificar al staff en canal de logs
-    if (process.env.STAFF_LOG_CHANNEL_ID) {
+    // Notificar al staff en canal de logs de purchase
+    if (process.env.PURCHASE_LOG_CHANNEL_ID) {
         try {
-            const logChannel = await interaction.guild.channels.fetch(process.env.STAFF_LOG_CHANNEL_ID);
+            const logChannel = await interaction.guild.channels.fetch(process.env.PURCHASE_LOG_CHANNEL_ID);
             
             const staffNotification = new EmbedBuilder()
                 .setColor('#5865F2')
@@ -1404,7 +1404,7 @@ async function handleNitroSelection(interaction) {
 
             await logChannel.send({ embeds: [staffNotification] });
         } catch (error) {
-            console.error('Error al enviar notificación al canal de logs:', error);
+            console.error('Error al enviar notificación al canal de logs de purchase:', error);
         }
     }
 }
@@ -1447,10 +1447,10 @@ async function handleAFKSelection(interaction) {
     // Responder a la interacción
     await interaction.reply({ embeds: [ticketInfoEmbed, afkEmbed] });
 
-    // Notificar al staff en canal de logs
-    if (process.env.STAFF_LOG_CHANNEL_ID) {
+    // Notificar al staff en canal de logs de purchase
+    if (process.env.PURCHASE_LOG_CHANNEL_ID) {
         try {
-            const logChannel = await interaction.guild.channels.fetch(process.env.STAFF_LOG_CHANNEL_ID);
+            const logChannel = await interaction.guild.channels.fetch(process.env.PURCHASE_LOG_CHANNEL_ID);
             
             const staffNotification = new EmbedBuilder()
                 .setColor(config.colors.warning)
@@ -1468,7 +1468,7 @@ async function handleAFKSelection(interaction) {
 
             await logChannel.send({ embeds: [staffNotification] });
         } catch (error) {
-            console.error('Error al enviar notificación al canal de logs:', error);
+            console.error('Error al enviar notificación al canal de logs de purchase:', error);
         }
     }
 }
