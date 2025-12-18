@@ -137,6 +137,16 @@ const commands = [
                 description: 'Clave de licencia',
                 type: 3,
                 required: true
+            },
+            {
+                name: 'idioma',
+                description: 'Idioma del mensaje',
+                type: 3,
+                required: false,
+                choices: [
+                    { name: 'Español', value: 'es' },
+                    { name: 'English', value: 'en' }
+                ]
             }
         ]
     }
@@ -729,26 +739,40 @@ client.on('interactionCreate', async (interaction) => {
                 
                 const usuario = interaction.options.getUser('usuario');
                 const key = interaction.options.getString('key');
+                const idioma = interaction.options.getString('idioma') || 'es'; // Español por defecto
                 
                 // Responder inmediatamente
                 await interaction.reply({ content: '⏳ Enviando licencia...', ephemeral: true });
                 
                 try {
-                    // Crear el embed de la licencia
-                    const licenseEmbed = new EmbedBuilder()
-                        .setColor('#00D9A3')
-                        .setTitle('🎉 ¡Tu Licencia de Factory Boosts Bot Lobby Tool!')
-                        .setDescription('═══════════════════════════════════════════\n    **FACTORY BOOSTS BOT LOBBY TOOL v1.0.5**\n═══════════════════════════════════════════\n\n✅ Gracias por tu compra\n\n🔑 **Tu Licencia:**\n```' + key + '```\n\n📋 **INSTRUCCIONES:**\n\n1. Ejecuta el instalador\n2. Ingresa tu clave de licencia\n3. Haz clic en "Activar"\n\n⚠️ **IMPORTANTE:**\n• La licencia está vinculada a tu PC (HWID)\n• Para cambiar de PC, solicita reset de HWID\n\n📞 **SOPORTE:**\n• Discord: https://discord.gg/factoryboosts\n• Web: https://factoryboosts.com\n• Disponible 24/7\n\n═══════════════════════════════════════════')
-                        .setThumbnail(interaction.guild.iconURL({ dynamic: true }))
-                        .setFooter({ text: 'Factory Boosts - Bot Lobby Tool' })
-                        .setTimestamp();
+                    let licenseEmbed;
+                    
+                    if (idioma === 'en') {
+                        // Versión en inglés
+                        licenseEmbed = new EmbedBuilder()
+                            .setColor('#00D9A3')
+                            .setTitle('🎉 Your Factory Boosts License!')
+                            .setDescription('═══════════════════════════════════════════\n    **FACTORY BOOSTS - LICENSE KEY**\n═══════════════════════════════════════════\n\n✅ Thank you for your purchase\n\n🔑 **Your License:**\n```' + key + '```\n\n📋 **INSTRUCTIONS:**\n\n1. Run the installer\n2. Enter your license key\n3. Click "Activate"\n\n⚠️ **IMPORTANT:**\n• License is tied to your PC (HWID)\n• To change PC, request HWID reset\n\n📞 **SUPPORT:**\n• Discord: https://discord.gg/factoryboosts\n• Web: https://factoryboosts.com\n• Available 24/7\n\n═══════════════════════════════════════════')
+                            .setThumbnail(interaction.guild.iconURL({ dynamic: true }))
+                            .setFooter({ text: 'Factory Boosts - Licensing System' })
+                            .setTimestamp();
+                    } else {
+                        // Versión en español
+                        licenseEmbed = new EmbedBuilder()
+                            .setColor('#00D9A3')
+                            .setTitle('🎉 ¡Tu Licencia de Factory Boosts!')
+                            .setDescription('═══════════════════════════════════════════\n    **FACTORY BOOSTS - CLAVE DE LICENCIA**\n═══════════════════════════════════════════\n\n✅ Gracias por tu compra\n\n🔑 **Tu Licencia:**\n```' + key + '```\n\n📋 **INSTRUCCIONES:**\n\n1. Ejecuta el instalador\n2. Ingresa tu clave de licencia\n3. Haz clic en "Activar"\n\n⚠️ **IMPORTANTE:**\n• La licencia está vinculada a tu PC (HWID)\n• Para cambiar de PC, solicita reset de HWID\n\n📞 **SOPORTE:**\n• Discord: https://discord.gg/factoryboosts\n• Web: https://factoryboosts.com\n• Disponible 24/7\n\n═══════════════════════════════════════════')
+                            .setThumbnail(interaction.guild.iconURL({ dynamic: true }))
+                            .setFooter({ text: 'Factory Boosts - Sistema de Licencias' })
+                            .setTimestamp();
+                    }
                     
                     // Enviar DM al usuario
                     await usuario.send({ embeds: [licenseEmbed] });
                     
                     // Confirmar al admin
                     await interaction.editReply({ 
-                        content: `✅ Licencia enviada correctamente a ${usuario.tag}` 
+                        content: `✅ Licencia enviada correctamente a ${usuario.tag} (${idioma === 'en' ? 'English' : 'Español'})` 
                     });
                     
                 } catch (error) {
