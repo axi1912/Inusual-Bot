@@ -47,6 +47,10 @@ const commands = [
         description: 'Configurar el panel de Discord Designs'
     },
     {
+        name: 'setup-nitro-promo',
+        description: 'Configurar el panel de Nitro Promo (XBOX)'
+    },
+    {
         name: 'setup-welcome',
         description: 'Configurar el sistema de bienvenida',
         options: [
@@ -396,6 +400,26 @@ async function setupLobbyPanel(channel) {
     await channel.send({ embeds: [embed], components: [row] });
 }
 
+// Función para crear el panel de Nitro Promo (XBOX)
+async function setupNitroPromoPanel(channel) {
+    const embed = new EmbedBuilder()
+        .setColor('#5865F2')
+        .setTitle('💎 3 Months Discord NITRO Promo (XBOX)')
+        .setDescription('**Get 3 months of Discord Nitro through Xbox Game Pass promotion.**\n\n🎮 **What you need:**\n• A Discord account that has **NEVER** had Nitro before\n• Xbox Game Pass Ultimate subscription\n\n⚠️ **Important Requirements:**\n• Account must be completely new to Nitro\n• Cannot have used any Nitro trial previously\n• No expired Nitro subscriptions on the account\n\n✅ **What you get:**\n• Full Discord Nitro for 3 months\n• All premium features included\n• Instant activation\n\n💰 **Price: $3**\n\nClick below to create a ticket and claim your promo.')
+        .setFooter({ text: '💎 Factory Boosts • Premium Nitro Service' })
+        .setTimestamp();
+
+    const row = new ActionRowBuilder()
+        .addComponents(
+            new ButtonBuilder()
+                .setCustomId('create_ticket_nitro_promo')
+                .setLabel('💎 Nitro Promo (XBOX)')
+                .setStyle(ButtonStyle.Primary)
+        );
+
+    await channel.send({ embeds: [embed], components: [row] });
+}
+
 // Función para crear embeds personalizados
 async function handleEmbedCommand(interaction) {
     try {
@@ -728,6 +752,21 @@ client.on('interactionCreate', async (interaction) => {
                 await interaction.editReply({ content: '✅ Panel de Discord Designs creado correctamente!' });
             }
             
+            if (interaction.commandName === 'setup-nitro-promo') {
+                // Verificar que sea administrador
+                if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
+                    return interaction.reply({ 
+                        content: '❌ Solo los administradores pueden usar este comando.', 
+                        ephemeral: true 
+                    });
+                }
+                
+                // Responder INMEDIATAMENTE
+                await interaction.reply({ content: '⏳ Creando panel de Nitro Promo...', ephemeral: true });
+                await setupNitroPromoPanel(interaction.channel);
+                await interaction.editReply({ content: '✅ Panel de Nitro Promo creado correctamente!' });
+            }
+            
             if (interaction.commandName === 'send-key') {
                 // Verificar que sea administrador
                 if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
@@ -752,7 +791,7 @@ client.on('interactionCreate', async (interaction) => {
                         licenseEmbed = new EmbedBuilder()
                             .setColor('#00D9A3')
                             .setTitle('🎉 Your Factory Boosts License!')
-                            .setDescription('═══════════════════════════════════════════\n    **FACTORY BOOSTS - LICENSE KEY**\n═══════════════════════════════════════════\n\n✅ Thank you for your purchase\n\n🔑 **Your License:**\n```' + key + '```\n\n📋 **INSTRUCTIONS:**\n\n1. Run the installer\n2. Enter your license key\n3. Click "Activate"\n\n⚠️ **IMPORTANT:**\n• License is tied to your PC (HWID)\n• To change PC, request HWID reset\n\n📞 **SUPPORT:**\n• Discord: https://discord.gg/factoryboosts\n• Web: https://factoryboosts.com\n• Available 24/7\n\n═══════════════════════════════════════════')
+                            .setDescription('═══════════════════════════════════════════\n    **FACTORY BOOSTS - LICENSE KEY**\n═══════════════════════════════════════════\n\n✅ Thank you for your purchase\n\n🔑 **Your License:**\n```' + key + '```\n\n📋 **INSTRUCTIONS:**\n\n1. Run the installer\n2. Enter your license key\n3. Click "Activate"\n\n⚠️ **IMPORTANT:**\n• License is tied to your PC (HWID)\n• To change PC, request HWID reset\n\n📞 **SUPPORT:**\n• Discord: https://discord.gg/factoryboosts\n• Web: https://factoryboosts.covm\n• Available 24/7\n\n═══════════════════════════════════════════')
                             .setThumbnail(interaction.guild.iconURL({ dynamic: true }))
                             .setFooter({ text: 'Factory Boosts - Licensing System' })
                             .setTimestamp();
@@ -898,6 +937,10 @@ client.on('interactionCreate', async (interaction) => {
                 // Responder INMEDIATAMENTE
                 await interaction.reply({ content: '⏳ Creando tu ticket de Discord Designs...', ephemeral: true });
                 await handleTicketCreation(interaction, 'designs');
+            } else if (interaction.customId === 'create_ticket_nitro_promo') {
+                // Responder INMEDIATAMENTE
+                await interaction.reply({ content: '⏳ Creando tu ticket de Nitro Promo...', ephemeral: true });
+                await handleTicketCreation(interaction, 'nitro_promo');
             } else if (interaction.customId === 'close_ticket') {
                 await closeTicketButton(interaction);
             } else if (interaction.customId === 'close_confirm') {
@@ -1033,6 +1076,9 @@ async function handleTicketCreation(interaction, type = 'boost', selectedPackage
         } else if (type === 'designs') {
             categoryId = '1447619352781389954'; // Categoría general
             channelName = `designs-${interaction.user.username}`;
+        } else if (type === 'nitro_promo') {
+            categoryId = '1447619352781389954'; // Categoría general
+            channelName = `nitro-promo-${interaction.user.username}`;
         } else {
             categoryId = '1447619352781389954'; // Categoría general
             channelName = `purchase-${interaction.user.username}`;
@@ -1206,6 +1252,30 @@ async function handleTicketCreation(interaction, type = 'boost', selectedPackage
                         }
                     )
                     .setTimestamp();
+            } else if (type === 'nitro_promo') {
+                welcomeEmbed = new EmbedBuilder()
+                    .setColor('#5865F2')
+                    .setTitle('🎫 Ticket Created - Nitro Promo (XBOX)')
+                    .setDescription(`Hello ${interaction.user}! Thank you for creating a ticket.\n\n**3 Months Discord Nitro Promo**\n\nBefore we proceed, please confirm:`)
+                    .addFields(
+                        {
+                            name: '⚠️ Account Requirements:',
+                            value: '✓ Your Discord account has **NEVER** had Nitro before\n✓ No previous Nitro trials used\n✓ No expired Nitro subscriptions\n✓ Account must be eligible for new promotions',
+                            inline: false
+                        },
+                        {
+                            name: '📋 What you\'ll receive:',
+                            value: '• 3 Months of Discord Nitro\n• All premium features\n• Instant activation after payment',
+                            inline: false
+                        },
+                        {
+                            name: '💡 Next Steps:',
+                            value: 'A staff member will verify your account eligibility and provide payment details.',
+                            inline: false
+                        }
+                    )
+                    .setFooter({ text: '💎 Factory Boosts • Nitro Promo Service' })
+                    .setTimestamp();
 
                 selectMenu = null; // No hay menú para HWID reset
             } else if (type === 'lobby') {
@@ -1326,7 +1396,9 @@ async function handleTicketCreation(interaction, type = 'boost', selectedPackage
                     'nitro': 'Nitro Tokens',
                     'afk': 'AFK Tool',
                     'lobby': 'Bot Lobby Tool',
-                    'hwid': 'HWID Reset'
+                    'hwid': 'HWID Reset',
+                    'nitro_promo': 'Nitro Promo (XBOX)',
+                    'designs': 'Discord Designs'
                 };
 
                 const logEmbed = new EmbedBuilder()
