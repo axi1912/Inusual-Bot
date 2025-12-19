@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { Client, GatewayIntentBits, EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, ButtonBuilder, ButtonStyle, PermissionFlagsBits, ChannelType, REST, Routes, AttachmentBuilder } = require('discord.js');
+const { Client, GatewayIntentBits, EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, ButtonBuilder, ButtonStyle, PermissionFlagsBits, ChannelType, REST, Routes, AttachmentBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
 const path = require('path');
 const config = require('./config.json');
 const db = require('./Data/db-mongo');
@@ -19,36 +19,36 @@ const activeTickets = new Map();
 // Definir comandos slash
 const commands = [
     {
-        name: 'setup',
-        description: 'Configurar el panel de tickets de Factory Boosts'
+        name: 'setup-tickets',
+        description: 'Configurar el panel unificado de tickets (Soporte, Compras, Reportes)'
     },
     {
-        name: 'setup-bots',
-        description: 'Configurar el panel de Custom Bots'
+        name: 'setup-info-boosts',
+        description: 'Mostrar información de Server Boosts'
     },
     {
-        name: 'setup-nitro',
-        description: 'Configurar el panel de Nitro Tokens'
+        name: 'setup-info-bots',
+        description: 'Mostrar información de Custom Bots'
     },
     {
-        name: 'setup-afk',
-        description: 'Configurar el panel de AFK Tool'
+        name: 'setup-info-nitro',
+        description: 'Mostrar información de Nitro Tokens'
     },
     {
-        name: 'setup-lobby',
-        description: 'Configurar el panel de Bot Lobby Tool'
+        name: 'setup-info-nitro-promo',
+        description: 'Mostrar información de Nitro Promo (XBOX)'
     },
     {
-        name: 'setup-hwid',
-        description: 'Configurar el panel de HWID Reset'
+        name: 'setup-info-afk',
+        description: 'Mostrar información de AFK Tool'
     },
     {
-        name: 'setup-designs',
-        description: 'Configurar el panel de Discord Designs'
+        name: 'setup-info-lobby',
+        description: 'Mostrar información de Bot Lobby Tool'
     },
     {
-        name: 'setup-nitro-promo',
-        description: 'Configurar el panel de Nitro Promo (XBOX)'
+        name: 'setup-info-designs',
+        description: 'Mostrar información de Discord Designs'
     },
     {
         name: 'setup-welcome',
@@ -420,6 +420,121 @@ async function setupNitroPromoPanel(channel) {
     await channel.send({ embeds: [embed], components: [row] });
 }
 
+// ==================== NUEVO SISTEMA UNIFICADO DE TICKETS ====================
+
+// Función para crear el panel unificado de tickets
+async function setupUnifiedTicketPanel(channel) {
+    const embed = new EmbedBuilder()
+        .setColor('#5865F2')
+        .setTitle('🎫 Ticket Support - Factory Boosts')
+        .setDescription('If you have any questions, general inquiries, need to report someone, or wish to make a purchase, please don\'t hesitate to open a ticket. We are here to help you and ensure your experience is as smooth and satisfactory as possible. Your satisfaction is our priority, and our team will be happy to assist you as soon as possible.')
+        .setThumbnail(channel.guild.iconURL({ dynamic: true }))
+        .setFooter({ text: '🎫 Factory Boosts • Ticket System' })
+        .setTimestamp();
+
+    const row1 = new ActionRowBuilder()
+        .addComponents(
+            new ButtonBuilder()
+                .setCustomId('ticket_asistencia')
+                .setLabel('🎫 General Support')
+                .setStyle(ButtonStyle.Secondary),
+            new ButtonBuilder()
+                .setCustomId('ticket_compra')
+                .setLabel('💰 Purchase Product')
+                .setStyle(ButtonStyle.Success)
+        );
+
+    const row2 = new ActionRowBuilder()
+        .addComponents(
+            new ButtonBuilder()
+                .setCustomId('ticket_reporte')
+                .setLabel('⚠️ Report Issue')
+                .setStyle(ButtonStyle.Danger),
+            new ButtonBuilder()
+                .setCustomId('ticket_hwid')
+                .setLabel('🔄 HWID Reset')
+                .setStyle(ButtonStyle.Primary)
+        );
+
+    await channel.send({ embeds: [embed], components: [row1, row2] });
+}
+
+// Funciones para crear embeds informativos (sin botones)
+async function setupBoostInfoPanel(channel) {
+    const embed = new EmbedBuilder()
+        .setColor('#00D9A3')
+        .setTitle('Server Boosts')
+        .setDescription('**Boost your Discord server with our reliable service.**\n\nChoose from 1 Month or 3 Month durations.\nPackages available: 6, 8, or 14 boosts.\n\nPrices starting at $5 for 1 month.')
+        .setImage('https://cdn.discordapp.com/attachments/1309783318031503384/1447815600905916538/NITRO_BOOSTS.gif?ex=6938feda&is=6937ad5a&hm=b800e00ab3b7326b1209675bce9b5abdc5f7ca3a1304dc56d6e0911ae3ae72e8&')
+        .setFooter({ text: '👑 Factory Boosts • Trusted Service' })
+        .setTimestamp();
+    await channel.send({ embeds: [embed] });
+}
+
+async function setupBotsInfoPanel(channel) {
+    const embed = new EmbedBuilder()
+        .setColor('#00D9A3')
+        .setTitle('Custom Discord Bots')
+        .setDescription('**Professional bot development tailored to your needs.**\n\nWe create custom bots with any features you want.\nFrom simple moderation to complex systems.\n\nPrices start at $15 for basic bots.')
+        .setImage('https://cdn.discordapp.com/attachments/1309783318031503384/1447815599957872793/CUSTOM_BOTS.gif?ex=6938feda&is=6937ad5a&hm=2e541bad78f18481c616c26b07bc4c22c74c424ff9670d342390f80c7661bcf8&')
+        .setFooter({ text: '🤖 Factory Development • Quality Custom Bots' })
+        .setTimestamp();
+    await channel.send({ embeds: [embed] });
+}
+
+async function setupNitroInfoPanel(channel) {
+    const embed = new EmbedBuilder()
+        .setColor('#5865F2')
+        .setTitle('Discord Nitro Tokens')
+        .setDescription('**Get Discord Nitro at affordable prices.**\n\nReceive your token instantly after payment.\nWorks with any Discord account.\n\n1 Month - $1.50\n3 Months - $4.00')
+        .setImage('https://cdn.discordapp.com/attachments/1309783318031503384/1447815600461316106/NITRO_TOKENS.gif?ex=6938feda&is=6937ad5a&hm=17ca989428bcd27ad6b735f7cad7e8b686fbb691ae62c07fa7410f1a4c62feb8&')
+        .setFooter({ text: '💎 Factory Boosts • Instant Delivery' })
+        .setTimestamp();
+    await channel.send({ embeds: [embed] });
+}
+
+async function setupNitroPromoInfoPanel(channel) {
+    const embed = new EmbedBuilder()
+        .setColor('#5865F2')
+        .setTitle('💎 3 Months Discord NITRO Promo (XBOX)')
+        .setDescription('**Get 3 months of Discord Nitro through Xbox Game Pass promotion.**\n\n🎮 **What you need:**\n• A Discord account that has **NEVER** had Nitro before\n• Xbox Game Pass Ultimate subscription\n\n⚠️ **Important Requirements:**\n• Account must be completely new to Nitro\n• Cannot have used any Nitro trial previously\n• No expired Nitro subscriptions on the account\n\n✅ **What you get:**\n• Full Discord Nitro for 3 months\n• All premium features included\n• Instant activation\n\n💰 **Price: $3**')
+        .setFooter({ text: '💎 Factory Boosts • Premium Nitro Service' })
+        .setTimestamp();
+    await channel.send({ embeds: [embed] });
+}
+
+async function setupAFKInfoPanel(channel) {
+    const embed = new EmbedBuilder()
+        .setColor('#00D9A3')
+        .setTitle('AFK Tool - Game Farming')
+        .setDescription('**Automated game farming made easy.**\n\nSafe, undetectable, and fast rank progression.\n24/7 support included.\n\nSubscriptions: 7 days ($5) to Lifetime ($50)')
+        .setFooter({ text: '🎮 Factory Tools • Professional AFK Service' })
+        .setTimestamp();
+    await channel.send({ embeds: [embed] });
+}
+
+async function setupLobbyInfoPanel(channel) {
+    const embed = new EmbedBuilder()
+        .setColor('#9B59B6')
+        .setTitle('Bot Lobby Tool')
+        .setDescription('**Professional lobby management system for your game.**\n\nAutomated lobby creation and smart player management.\nMulti-platform support with 24/7 uptime guarantee.\n\nEnterprise-grade security and instant setup.\nDedicated priority support included.')
+        .setFooter({ text: '🎯 Factory Tools • Premium Lobby Solutions' })
+        .setTimestamp();
+    await channel.send({ embeds: [embed] });
+}
+
+async function setupDesignsInfoPanel(channel) {
+    const embed = new EmbedBuilder()
+        .setColor('#F1C40F')
+        .setTitle('🎨 Discord Designs Service')
+        .setDescription('**Professional Discord server designs.**\n\nCustom banners, icons, and complete server themes.\nProfessional emojis and stickers design.\n\nFast delivery with unlimited revisions.\nUnique designs tailored to your brand.')
+        .setFooter({ text: '🎨 Factory Discord Designs' })
+        .setTimestamp();
+    await channel.send({ embeds: [embed] });
+}
+
+// ==================== FIN EMBEDS INFORMATIVOS ====================
+
 // Función para crear embeds personalizados
 async function handleEmbedCommand(interaction) {
     try {
@@ -599,7 +714,12 @@ client.on('messageCreate', async (message) => {
         message.channel.name.startsWith('tokens-') ||
         message.channel.name.startsWith('afk-') ||
         message.channel.name.startsWith('hwid-') ||
-        message.channel.name.startsWith('lobby-')
+        message.channel.name.startsWith('lobby-') ||
+        message.channel.name.startsWith('soporte-') ||
+        message.channel.name.startsWith('reporte-') ||
+        message.channel.name.startsWith('designs-') ||
+        message.channel.name.startsWith('nitro-promo-') ||
+        message.channel.name.startsWith('ticket-')
     );
     
     if (!isTicketChannel) return;
@@ -647,7 +767,7 @@ client.on('interactionCreate', async (interaction) => {
 
         // Comandos slash
         if (interaction.isChatInputCommand()) {
-            if (interaction.commandName === 'setup') {
+            if (interaction.commandName === 'setup-tickets') {
                 // Verificar que sea administrador
                 if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
                     return interaction.reply({ 
@@ -657,12 +777,12 @@ client.on('interactionCreate', async (interaction) => {
                 }
                 
                 // Responder INMEDIATAMENTE
-                await interaction.reply({ content: '⏳ Creando panel...', ephemeral: true });
-                await setupTicketPanel(interaction.channel);
-                await interaction.editReply({ content: '✅ Panel de tickets creado correctamente!' });
+                await interaction.reply({ content: '⏳ Creando panel unificado de tickets...', ephemeral: true });
+                await setupUnifiedTicketPanel(interaction.channel);
+                await interaction.editReply({ content: '✅ Panel unificado de tickets creado correctamente!' });
             }
             
-            if (interaction.commandName === 'setup-bots') {
+            if (interaction.commandName === 'setup-info-boosts') {
                 // Verificar que sea administrador
                 if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
                     return interaction.reply({ 
@@ -672,12 +792,12 @@ client.on('interactionCreate', async (interaction) => {
                 }
                 
                 // Responder INMEDIATAMENTE
-                await interaction.reply({ content: '⏳ Creando panel de custom bots...', ephemeral: true });
-                await setupBotsPanel(interaction.channel);
-                await interaction.editReply({ content: '✅ Panel de custom bots creado correctamente!' });
+                await interaction.reply({ content: '⏳ Mostrando información de Server Boosts...', ephemeral: true });
+                await setupBoostInfoPanel(interaction.channel);
+                await interaction.editReply({ content: '✅ Información de Server Boosts publicada!' });
             }
             
-            if (interaction.commandName === 'setup-nitro') {
+            if (interaction.commandName === 'setup-info-bots') {
                 // Verificar que sea administrador
                 if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
                     return interaction.reply({ 
@@ -687,12 +807,12 @@ client.on('interactionCreate', async (interaction) => {
                 }
                 
                 // Responder INMEDIATAMENTE
-                await interaction.reply({ content: '⏳ Creando panel de nitro tokens...', ephemeral: true });
-                await setupNitroPanel(interaction.channel);
-                await interaction.editReply({ content: '✅ Panel de nitro tokens creado correctamente!' });
+                await interaction.reply({ content: '⏳ Mostrando información de Custom Bots...', ephemeral: true });
+                await setupBotsInfoPanel(interaction.channel);
+                await interaction.editReply({ content: '✅ Información de Custom Bots publicada!' });
             }
             
-            if (interaction.commandName === 'setup-afk') {
+            if (interaction.commandName === 'setup-info-nitro') {
                 // Verificar que sea administrador
                 if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
                     return interaction.reply({ 
@@ -702,12 +822,12 @@ client.on('interactionCreate', async (interaction) => {
                 }
                 
                 // Responder INMEDIATAMENTE
-                await interaction.reply({ content: '⏳ Creando panel de AFK Tool...', ephemeral: true });
-                await setupAFKPanel(interaction.channel);
-                await interaction.editReply({ content: '✅ Panel de AFK Tool creado correctamente!' });
+                await interaction.reply({ content: '⏳ Mostrando información de Nitro Tokens...', ephemeral: true });
+                await setupNitroInfoPanel(interaction.channel);
+                await interaction.editReply({ content: '✅ Información de Nitro Tokens publicada!' });
             }
             
-            if (interaction.commandName === 'setup-lobby') {
+            if (interaction.commandName === 'setup-info-nitro-promo') {
                 // Verificar que sea administrador
                 if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
                     return interaction.reply({ 
@@ -717,12 +837,12 @@ client.on('interactionCreate', async (interaction) => {
                 }
                 
                 // Responder INMEDIATAMENTE
-                await interaction.reply({ content: '⏳ Creando panel de Bot Lobby Tool...', ephemeral: true });
-                await setupLobbyPanel(interaction.channel);
-                await interaction.editReply({ content: '✅ Panel de Bot Lobby Tool creado correctamente!' });
+                await interaction.reply({ content: '⏳ Mostrando información de Nitro Promo...', ephemeral: true });
+                await setupNitroPromoInfoPanel(interaction.channel);
+                await interaction.editReply({ content: '✅ Información de Nitro Promo publicada!' });
             }
             
-            if (interaction.commandName === 'setup-hwid') {
+            if (interaction.commandName === 'setup-info-afk') {
                 // Verificar que sea administrador
                 if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
                     return interaction.reply({ 
@@ -732,12 +852,12 @@ client.on('interactionCreate', async (interaction) => {
                 }
                 
                 // Responder INMEDIATAMENTE
-                await interaction.reply({ content: '⏳ Creando panel de HWID Reset...', ephemeral: true });
-                await setupHWIDPanel(interaction.channel);
-                await interaction.editReply({ content: '✅ Panel de HWID Reset creado correctamente!' });
+                await interaction.reply({ content: '⏳ Mostrando información de AFK Tool...', ephemeral: true });
+                await setupAFKInfoPanel(interaction.channel);
+                await interaction.editReply({ content: '✅ Información de AFK Tool publicada!' });
             }
             
-            if (interaction.commandName === 'setup-designs') {
+            if (interaction.commandName === 'setup-info-lobby') {
                 // Verificar que sea administrador
                 if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
                     return interaction.reply({ 
@@ -747,12 +867,12 @@ client.on('interactionCreate', async (interaction) => {
                 }
                 
                 // Responder INMEDIATAMENTE
-                await interaction.reply({ content: '⏳ Creando panel de Discord Designs...', ephemeral: true });
-                await setupDesignsPanel(interaction.channel);
-                await interaction.editReply({ content: '✅ Panel de Discord Designs creado correctamente!' });
+                await interaction.reply({ content: '⏳ Mostrando información de Bot Lobby Tool...', ephemeral: true });
+                await setupLobbyInfoPanel(interaction.channel);
+                await interaction.editReply({ content: '✅ Información de Bot Lobby Tool publicada!' });
             }
             
-            if (interaction.commandName === 'setup-nitro-promo') {
+            if (interaction.commandName === 'setup-info-designs') {
                 // Verificar que sea administrador
                 if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
                     return interaction.reply({ 
@@ -762,9 +882,9 @@ client.on('interactionCreate', async (interaction) => {
                 }
                 
                 // Responder INMEDIATAMENTE
-                await interaction.reply({ content: '⏳ Creando panel de Nitro Promo...', ephemeral: true });
-                await setupNitroPromoPanel(interaction.channel);
-                await interaction.editReply({ content: '✅ Panel de Nitro Promo creado correctamente!' });
+                await interaction.reply({ content: '⏳ Mostrando información de Discord Designs...', ephemeral: true });
+                await setupDesignsInfoPanel(interaction.channel);
+                await interaction.editReply({ content: '✅ Información de Discord Designs publicada!' });
             }
             
             if (interaction.commandName === 'send-key') {
@@ -909,7 +1029,132 @@ client.on('interactionCreate', async (interaction) => {
 
         // Botones
         if (interaction.isButton()) {
-            if (interaction.customId === 'create_ticket') {
+            // Nuevos botones del panel unificado
+            if (interaction.customId === 'ticket_asistencia') {
+                const modal = new ModalBuilder()
+                    .setCustomId('modal_asistencia')
+                    .setTitle('🎫 General Support');
+
+                const asuntoInput = new TextInputBuilder()
+                    .setCustomId('asunto_consulta')
+                    .setLabel('Subject of your inquiry')
+                    .setStyle(TextInputStyle.Short)
+                    .setPlaceholder('Ex: Question about boosts')
+                    .setRequired(true)
+                    .setMaxLength(100);
+
+                const descripcionInput = new TextInputBuilder()
+                    .setCustomId('descripcion_consulta')
+                    .setLabel('Detailed description')
+                    .setStyle(TextInputStyle.Paragraph)
+                    .setPlaceholder('Describe your question or inquiry here...')
+                    .setRequired(true)
+                    .setMaxLength(1000);
+
+                const firstRow = new ActionRowBuilder().addComponents(asuntoInput);
+                const secondRow = new ActionRowBuilder().addComponents(descripcionInput);
+
+                modal.addComponents(firstRow, secondRow);
+                await interaction.showModal(modal);
+            } else if (interaction.customId === 'ticket_compra') {
+                const modal = new ModalBuilder()
+                    .setCustomId('modal_compra')
+                    .setTitle('💰 Purchase Product');
+
+                const productoInput = new TextInputBuilder()
+                    .setCustomId('producto_compra')
+                    .setLabel('What product do you want to purchase?')
+                    .setStyle(TextInputStyle.Short)
+                    .setPlaceholder('Ex: Server Boosts, Custom Bot, Nitro, AFK Tool, etc.')
+                    .setRequired(true)
+                    .setMaxLength(100);
+
+                const detallesInput = new TextInputBuilder()
+                    .setCustomId('detalles_compra')
+                    .setLabel('Additional details')
+                    .setStyle(TextInputStyle.Paragraph)
+                    .setPlaceholder('Specify the package or features you need...')
+                    .setRequired(true)
+                    .setMaxLength(1000);
+
+                const firstRow = new ActionRowBuilder().addComponents(productoInput);
+                const secondRow = new ActionRowBuilder().addComponents(detallesInput);
+
+                modal.addComponents(firstRow, secondRow);
+                await interaction.showModal(modal);
+            } else if (interaction.customId === 'ticket_reporte') {
+                const modal = new ModalBuilder()
+                    .setCustomId('modal_reporte')
+                    .setTitle('⚠️ Report Issue');
+
+                const tipoInput = new TextInputBuilder()
+                    .setCustomId('tipo_problema')
+                    .setLabel('Type of issue')
+                    .setStyle(TextInputStyle.Short)
+                    .setPlaceholder('Ex: License error, technical problem, bug, etc.')
+                    .setRequired(true)
+                    .setMaxLength(100);
+
+                const descripcionInput = new TextInputBuilder()
+                    .setCustomId('descripcion_problema')
+                    .setLabel('Issue description')
+                    .setStyle(TextInputStyle.Paragraph)
+                    .setPlaceholder('Describe the problem in detail...')
+                    .setRequired(true)
+                    .setMaxLength(1000);
+
+                const pasosInput = new TextInputBuilder()
+                    .setCustomId('pasos_problema')
+                    .setLabel('How to reproduce the issue? (Optional)')
+                    .setStyle(TextInputStyle.Paragraph)
+                    .setPlaceholder('Steps to reproduce the error...')
+                    .setRequired(false)
+                    .setMaxLength(500);
+
+                const firstRow = new ActionRowBuilder().addComponents(tipoInput);
+                const secondRow = new ActionRowBuilder().addComponents(descripcionInput);
+                const thirdRow = new ActionRowBuilder().addComponents(pasosInput);
+
+                modal.addComponents(firstRow, secondRow, thirdRow);
+                await interaction.showModal(modal);
+            } else if (interaction.customId === 'ticket_hwid') {
+                const modal = new ModalBuilder()
+                    .setCustomId('modal_hwid')
+                    .setTitle('🔄 HWID Reset');
+
+                const productoInput = new TextInputBuilder()
+                    .setCustomId('producto_hwid')
+                    .setLabel('Product')
+                    .setStyle(TextInputStyle.Short)
+                    .setPlaceholder('Ex: AFK Tool, Bot Lobby Tool, etc.')
+                    .setRequired(true)
+                    .setMaxLength(100);
+
+                const hwidInput = new TextInputBuilder()
+                    .setCustomId('hwid_actual')
+                    .setLabel('Your current HWID (if you have it)')
+                    .setStyle(TextInputStyle.Short)
+                    .setPlaceholder('Current HWID linked to your license')
+                    .setRequired(false)
+                    .setMaxLength(200);
+
+                const razonInput = new TextInputBuilder()
+                    .setCustomId('razon_hwid')
+                    .setLabel('Reason for reset')
+                    .setStyle(TextInputStyle.Paragraph)
+                    .setPlaceholder('Ex: Changed PC, formatted, etc.')
+                    .setRequired(true)
+                    .setMaxLength(500);
+
+                const firstRow = new ActionRowBuilder().addComponents(productoInput);
+                const secondRow = new ActionRowBuilder().addComponents(hwidInput);
+                const thirdRow = new ActionRowBuilder().addComponents(razonInput);
+
+                modal.addComponents(firstRow, secondRow, thirdRow);
+                await interaction.showModal(modal);
+            }
+            // Botones antiguos (mantener compatibilidad)
+            else if (interaction.customId === 'create_ticket') {
                 // Responder INMEDIATAMENTE
                 await interaction.reply({ content: '⏳ Creando tu ticket...', ephemeral: true });
                 await handleTicketCreation(interaction, 'boost');
@@ -1023,6 +1268,38 @@ client.on('interactionCreate', async (interaction) => {
                 await handleNitroSelection(interaction);
             } else if (interaction.customId === 'select_afk_package') {
                 await handleAFKSelection(interaction);
+            }
+            return;
+        }
+
+        // Handlers para modals (formularios)
+        if (interaction.isModalSubmit()) {
+            if (interaction.customId === 'modal_asistencia') {
+                const asunto = interaction.fields.getTextInputValue('asunto_consulta');
+                const descripcion = interaction.fields.getTextInputValue('descripcion_consulta');
+                
+                await interaction.reply({ content: '⏳ Creating your support ticket...', ephemeral: true });
+                await handleTicketCreationFromModal(interaction, 'asistencia', { asunto, descripcion });
+            } else if (interaction.customId === 'modal_compra') {
+                const producto = interaction.fields.getTextInputValue('producto_compra');
+                const detalles = interaction.fields.getTextInputValue('detalles_compra');
+                
+                await interaction.reply({ content: '⏳ Creating your purchase ticket...', ephemeral: true });
+                await handleTicketCreationFromModal(interaction, 'compra', { producto, detalles });
+            } else if (interaction.customId === 'modal_reporte') {
+                const tipo = interaction.fields.getTextInputValue('tipo_problema');
+                const descripcion = interaction.fields.getTextInputValue('descripcion_problema');
+                const pasos = interaction.fields.getTextInputValue('pasos_problema') || 'Not specified';
+                
+                await interaction.reply({ content: '⏳ Creating your report ticket...', ephemeral: true });
+                await handleTicketCreationFromModal(interaction, 'reporte', { tipo, descripcion, pasos });
+            } else if (interaction.customId === 'modal_hwid') {
+                const producto = interaction.fields.getTextInputValue('producto_hwid');
+                const hwid = interaction.fields.getTextInputValue('hwid_actual') || 'Not provided';
+                const razon = interaction.fields.getTextInputValue('razon_hwid');
+                
+                await interaction.reply({ content: '⏳ Creating your HWID Reset ticket...', ephemeral: true });
+                await handleTicketCreationFromModal(interaction, 'hwid_reset', { producto, hwid, razon });
             }
             return;
         }
@@ -1382,7 +1659,7 @@ async function handleTicketCreation(interaction, type = 'boost', selectedPackage
         await ticketChannel.send({ embeds: [botAgentEmbed] });
 
         await interaction.editReply({ 
-            content: `✅ Tu ticket ha sido creado: ${ticketChannel}` 
+            content: `✅ Your ticket has been created: ${ticketChannel}` 
         });
 
         // Enviar notificación al canal de logs cuando se crea el ticket
@@ -1423,6 +1700,238 @@ async function handleTicketCreation(interaction, type = 'boost', selectedPackage
 
     } catch (error) {
         console.error('Error al crear ticket:', error);
+        try {
+            await interaction.editReply({ 
+                content: '❌ Hubo un error al crear tu ticket. Por favor contacta a un administrador.' 
+            });
+        } catch (e) {
+            console.error('No se pudo editar la respuesta:', e);
+        }
+    }
+}
+
+// Función para crear tickets desde modals (formularios)
+async function handleTicketCreationFromModal(interaction, type, formData) {
+    // Verificar si el usuario ya tiene un ticket abierto
+    const existingTicket = interaction.guild.channels.cache.find(
+        ch => (ch.name.includes(interaction.user.username.toLowerCase()) && 
+              (ch.name.startsWith('ticket-') || ch.name.startsWith('purchase-') || 
+               ch.name.startsWith('soporte-') || ch.name.startsWith('reporte-') || 
+               ch.name.startsWith('hwid-'))) && 
+            ch.type === ChannelType.GuildText
+    );
+
+    if (existingTicket) {
+        return interaction.editReply({ 
+            content: `❌ Ya tienes un ticket abierto: ${existingTicket}`
+        });
+    }
+
+    try {
+        let categoryId;
+        let channelName;
+        let ticketType;
+        
+        // Determinar el nombre y tipo según el tipo de ticket
+        if (type === 'asistencia') {
+            categoryId = '1436574895596245042'; // Categoría de Support
+            channelName = `soporte-${interaction.user.username}`;
+            ticketType = 'Asistencia General';
+        } else if (type === 'compra') {
+            categoryId = '1447619352781389954'; // Categoría general
+            channelName = `purchase-${interaction.user.username}`;
+            ticketType = 'Compra de Producto';
+        } else if (type === 'reporte') {
+            categoryId = '1447619352781389954'; // Categoría general
+            channelName = `reporte-${interaction.user.username}`;
+            ticketType = 'Reporte de Problema';
+        } else if (type === 'hwid_reset') {
+            categoryId = '1447619352781389954'; // Categoría general
+            channelName = `hwid-${interaction.user.username}`;
+            ticketType = 'HWID Reset';
+        } else {
+            categoryId = '1447619352781389954'; // Categoría general
+            channelName = `ticket-${interaction.user.username}`;
+            ticketType = 'Ticket General';
+        }
+        
+        // Crear canal de ticket
+        const ticketChannel = await interaction.guild.channels.create({
+            name: channelName,
+            type: ChannelType.GuildText,
+            parent: categoryId || null,
+            permissionOverwrites: [
+                {
+                    id: interaction.guild.id,
+                    deny: [PermissionFlagsBits.ViewChannel]
+                },
+                {
+                    id: interaction.user.id,
+                    allow: [
+                        PermissionFlagsBits.ViewChannel,
+                        PermissionFlagsBits.SendMessages,
+                        PermissionFlagsBits.ReadMessageHistory,
+                        PermissionFlagsBits.AttachFiles
+                    ]
+                },
+                {
+                    id: client.user.id,
+                    allow: [
+                        PermissionFlagsBits.ViewChannel,
+                        PermissionFlagsBits.SendMessages,
+                        PermissionFlagsBits.ManageChannels
+                    ]
+                }
+            ]
+        });
+
+        // Dar permisos a todos los miembros con permisos de Administrador
+        const adminMembers = interaction.guild.members.cache.filter(member => 
+            member.permissions.has(PermissionFlagsBits.Administrator)
+        );
+        
+        for (const [memberId, member] of adminMembers) {
+            await ticketChannel.permissionOverwrites.create(memberId, {
+                ViewChannel: true,
+                SendMessages: true,
+                ReadMessageHistory: true,
+                AttachFiles: true
+            });
+        }
+
+        // Guardar ticket en memoria
+        activeTickets.set(ticketChannel.id, {
+            userId: interaction.user.id,
+            createdAt: Date.now()
+        });
+
+        // Guardar en base de datos
+        const ticketId = Math.floor(Math.random() * 9000) + 1000;
+        db.addTicket({
+            id: ticketId,
+            channelId: ticketChannel.id,
+            userId: interaction.user.id,
+            username: interaction.user.tag,
+            type: ticketType,
+            status: 'open',
+            createdAt: new Date().toISOString()
+        });
+
+        // Crear embed según el tipo de ticket
+        let welcomeEmbed;
+        let descripcionFields = [];
+        
+        if (type === 'asistencia') {
+            descripcionFields = [
+                { name: '📋 Subject', value: formData.asunto, inline: false },
+                { name: '💬 Description', value: formData.descripcion, inline: false }
+            ];
+            welcomeEmbed = new EmbedBuilder()
+                .setColor('#00D9A3')
+                .setTitle('🎫 General Support Ticket')
+                .setDescription(`Hello ${interaction.user}! Your ticket has been created.\n\n**Ticket Information:**`)
+                .addFields(descripcionFields)
+                .setFooter({ text: 'A staff member will assist you soon' })
+                .setTimestamp();
+        } else if (type === 'compra') {
+            descripcionFields = [
+                { name: '🛒 Product', value: formData.producto, inline: false },
+                { name: '📝 Details', value: formData.detalles, inline: false }
+            ];
+            welcomeEmbed = new EmbedBuilder()
+                .setColor('#00D9A3')
+                .setTitle('💰 Purchase Ticket')
+                .setDescription(`Hello ${interaction.user}! Your purchase ticket has been created.\n\n**Order Information:**`)
+                .addFields(descripcionFields)
+                .setFooter({ text: 'Staff will process your purchase soon' })
+                .setTimestamp();
+        } else if (type === 'reporte') {
+            descripcionFields = [
+                { name: '⚠️ Issue Type', value: formData.tipo, inline: false },
+                { name: '📋 Description', value: formData.descripcion, inline: false },
+                { name: '🔧 Steps to Reproduce', value: formData.pasos, inline: false }
+            ];
+            welcomeEmbed = new EmbedBuilder()
+                .setColor('#E74C3C')
+                .setTitle('⚠️ Issue Report')
+                .setDescription(`Hello ${interaction.user}! Your report has been received.\n\n**Issue Details:**`)
+                .addFields(descripcionFields)
+                .setFooter({ text: 'We will investigate the issue' })
+                .setTimestamp();
+        } else if (type === 'hwid_reset') {
+            descripcionFields = [
+                { name: '🎮 Product', value: formData.producto, inline: false },
+                { name: '🔑 Current HWID', value: formData.hwid, inline: false },
+                { name: '📝 Reason', value: formData.razon, inline: false }
+            ];
+            welcomeEmbed = new EmbedBuilder()
+                .setColor('#00D9A3')
+                .setTitle('🔄 HWID Reset Ticket')
+                .setDescription(`Hello ${interaction.user}! Your HWID Reset request has been created.\n\n**Information:**`)
+                .addFields(descripcionFields)
+                .setFooter({ text: 'We will process your reset soon' })
+                .setTimestamp();
+        }
+
+        // Botón para cerrar ticket
+        const row = new ActionRowBuilder()
+            .addComponents(
+                new ButtonBuilder()
+                    .setCustomId('close_ticket')
+                    .setLabel('🔒 Cerrar Ticket')
+                    .setStyle(ButtonStyle.Danger)
+            );
+
+        await ticketChannel.send({ 
+            content: `${interaction.user}`,
+            embeds: [welcomeEmbed], 
+            components: [row]
+        });
+
+        // Mensaje automático del bot agente
+        const botAgentEmbed = new EmbedBuilder()
+            .setColor('#00D9A3')
+            .setAuthor({ 
+                name: 'Factory Bot Assistant', 
+                iconURL: client.user.displayAvatarURL() 
+            })
+            .setDescription('👋 **Hello! Thank you for opening a ticket.**\n\nI\'ve received your information. Our team will assist you shortly.\n\n💡 **Need immediate human support?**\nSimply type `human` and a staff member will be notified right away.')
+            .setFooter({ text: '🤖 Automated Assistant • Factory Boosts' })
+            .setTimestamp();
+
+        await ticketChannel.send({ embeds: [botAgentEmbed] });
+
+        await interaction.editReply({ 
+            content: `✅ Your ticket has been created: ${ticketChannel}` 
+        });
+
+        // Enviar notificación al canal de logs
+        if (process.env.STAFF_LOG_CHANNEL_ID) {
+            try {
+                const logChannel = await interaction.guild.channels.fetch(process.env.STAFF_LOG_CHANNEL_ID);
+                
+                const logEmbed = new EmbedBuilder()
+                    .setColor(config.colors.primary)
+                    .setTitle('🎫 Nuevo Ticket Creado')
+                    .setDescription(`Un usuario ha abierto un nuevo ticket`)
+                    .addFields(
+                        { name: '👤 Usuario', value: `${interaction.user} (${interaction.user.tag})`, inline: true },
+                        { name: '📋 Tipo', value: ticketType, inline: true },
+                        { name: '🎫 Canal', value: `${ticketChannel}`, inline: false },
+                        { name: '🆔 Ticket ID', value: `#${ticketId}`, inline: true }
+                    )
+                    .setThumbnail(interaction.user.displayAvatarURL())
+                    .setFooter({ text: `User ID: ${interaction.user.id}` })
+                    .setTimestamp();
+
+                await logChannel.send({ embeds: [logEmbed] });
+            } catch (error) {
+                console.error('Error al enviar notificación al canal de logs:', error);
+            }
+        }
+
+    } catch (error) {
+        console.error('Error al crear ticket desde modal:', error);
         try {
             await interaction.editReply({ 
                 content: '❌ Hubo un error al crear tu ticket. Por favor contacta a un administrador.' 
