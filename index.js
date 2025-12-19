@@ -153,6 +153,18 @@ const commands = [
                 ]
             }
         ]
+    },
+    {
+        name: 'setup-member-counter',
+        description: 'Configurar canal de contador de miembros en tiempo real',
+        options: [
+            {
+                name: 'categoria',
+                description: 'Categoría donde crear el canal (opcional)',
+                type: 7,
+                required: false
+            }
+        ]
     }
 ];
 
@@ -189,8 +201,31 @@ client.once('ready', async () => {
 
 // ==================== SISTEMA DE BIENVENIDA SIMPLIFICADO ====================
 
+// Función para actualizar el contador de miembros
+async function updateMemberCounter(guild) {
+    if (!config.memberCounterChannelId) return;
+    
+    try {
+        const channel = guild.channels.cache.get(config.memberCounterChannelId);
+        if (!channel) return;
+        
+        const memberCount = guild.memberCount;
+        const newName = `👥 Members: ${memberCount}`;
+        
+        // Solo actualizar si el nombre cambió (evitar rate limits)
+        if (channel.name !== newName) {
+            await channel.setName(newName);
+            console.log(`✅ Contador actualizado: ${memberCount} miembros`);
+        }
+    } catch (error) {
+        console.error('Error al actualizar contador de miembros:', error);
+    }
+}
+
 // Evento cuando un nuevo miembro se une al servidor
 client.on('guildMemberAdd', async (member) => {
+    // Actualizar contador de miembros
+    await updateMemberCounter(member.guild);
     if (!config.welcome.enabled) return;
     
     // Verificar si hay un canal configurado
@@ -236,6 +271,12 @@ client.on('guildMemberAdd', async (member) => {
     } catch (error) {
         console.error('❌ Error al enviar mensaje de bienvenida:', error);
     }
+});
+
+// Evento cuando un miembro sale del servidor
+client.on('guildMemberRemove', async (member) => {
+    // Actualizar contador de miembros
+    await updateMemberCounter(member.guild);
 });
 
 // ==================== FIN SISTEMA DE BIENVENIDA ====================
@@ -1023,6 +1064,78 @@ client.on('interactionCreate', async (interaction) => {
                     embeds: [welcomeEmbed],
                     components: components
                 });
+            }
+
+            if (interaction.commandName === 'setup-member-counter') {
+                if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
+                    return interaction.reply({ 
+                        content: '❌ Solo los administradores pueden usar este comando.',
+                        ephemeral: true 
+                    });
+                }
+                
+                await interaction.deferReply({ ephemeral: true });
+                
+                try {
+                    const categoria = interaction.options.getChannel('categoria');
+                    const memberCount = interaction.guild.memberCount;
+                    const roleId = '1247686451160813698';
+                    
+                    // Crear canal de voz
+                    const voiceChannel = await interaction.guild.channels.create({
+                        name: `👥 Members: ${memberCount}`,
+                        type: ChannelType.GuildVoice,
+                        parent: categoria ? categoria.id : null,
+                        permissionOverwrites: [
+                            {
+                                id: interaction.guild.id, // @everyone
+                                deny: [PermissionFlagsBits.ViewChannel]
+                            },
+                            {
+                                id: roleId, // Rol específico
+                                allow: [PermissionFlagsBits.ViewChannel],
+                                deny: [PermissionFlagsBits.Connect]
+                            },
+                            {
+                                id: client.user.id, // Bot
+                                allow: [
+                                    PermissionFlagsBits.ViewChannel,
+                                    PermissionFlagsBits.ManageChannels
+                                ]
+                            }
+                        ]
+                    });
+                    
+                    // Dar permisos adicionales a administradores
+                    const adminMembers = interaction.guild.members.cache.filter(member => 
+                        member.permissions.has(PermissionFlagsBits.Administrator)
+                    );
+                    
+                    for (const [memberId, member] of adminMembers) {
+                        await voiceChannel.permissionOverwrites.create(memberId, {
+                            ViewChannel: true,
+                            Connect: true,
+                            ManageChannels: true
+                        });
+                    }
+                    
+                    // Guardar el ID del canal en config para futuras actualizaciones
+                    config.memberCounterChannelId = voiceChannel.id;
+                    
+                    await interaction.editReply({ 
+                        content: `✅ Canal de contador de miembros creado: ${voiceChannel}\n\n` +
+                                `👥 **Miembros actuales:** ${memberCount}\n` +
+                                `🔒 **Visible solo para:** <@&${roleId}> y administradores\n` +
+                                `⚠️ **Nadie puede unirse** (solo ver)` 
+                    });
+                    
+                } catch (error) {
+                    console.error('Error al crear canal de contador:', error);
+                    await interaction.editReply({ 
+                        content: '❌ Error al crear el canal de contador de miembros.' 
+                    });
+                }
+                return;
             }
             return;
         }
