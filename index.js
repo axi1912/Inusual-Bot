@@ -165,6 +165,18 @@ const commands = [
                 required: false
             }
         ]
+    },
+    {
+        name: 'give-role-all',
+        description: 'Dar un rol a todos los miembros que no lo tienen',
+        options: [
+            {
+                name: 'rol',
+                description: 'El rol a asignar',
+                type: 8, // ROLE type
+                required: true
+            }
+        ]
     }
 ];
 
@@ -1133,6 +1145,84 @@ client.on('interactionCreate', async (interaction) => {
                     console.error('Error al crear canal de contador:', error);
                     await interaction.editReply({ 
                         content: '❌ Error al crear el canal de contador de miembros.' 
+                    });
+                }
+                return;
+            }
+
+            if (interaction.commandName === 'give-role-all') {
+                if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
+                    return interaction.reply({ 
+                        content: '❌ Solo los administradores pueden usar este comando.',
+                        ephemeral: true 
+                    });
+                }
+                
+                await interaction.deferReply({ ephemeral: true });
+                
+                try {
+                    const role = interaction.options.getRole('rol');
+                    
+                    // Verificar que el rol exista
+                    if (!role) {
+                        return interaction.editReply({ 
+                            content: '❌ No se encontró el rol especificado.' 
+                        });
+                    }
+                    
+                    // Obtener todos los miembros del servidor
+                    await interaction.guild.members.fetch();
+                    
+                    // Filtrar miembros que NO tienen el rol (excluir bots)
+                    const membersWithoutRole = interaction.guild.members.cache.filter(
+                        member => !member.user.bot && !member.roles.cache.has(role.id)
+                    );
+                    
+                    if (membersWithoutRole.size === 0) {
+                        return interaction.editReply({ 
+                            content: `✅ Todos los miembros ya tienen el rol ${role}` 
+                        });
+                    }
+                    
+                    // Mensaje de confirmación
+                    await interaction.editReply({ 
+                        content: `⏳ Asignando rol ${role} a **${membersWithoutRole.size}** miembros...\n\n` +
+                                `Esto puede tomar un momento. Por favor espera...` 
+                    });
+                    
+                    let success = 0;
+                    let failed = 0;
+                    
+                    // Dar el rol a cada miembro (con delay para evitar rate limits)
+                    for (const [memberId, member] of membersWithoutRole) {
+                        try {
+                            await member.roles.add(role);
+                            success++;
+                            
+                            // Delay pequeño para evitar rate limits (1 segundo cada 10 miembros)
+                            if (success % 10 === 0) {
+                                await new Promise(resolve => setTimeout(resolve, 1000));
+                            }
+                        } catch (error) {
+                            console.error(`Error al dar rol a ${member.user.tag}:`, error);
+                            failed++;
+                        }
+                    }
+                    
+                    // Mensaje final
+                    await interaction.editReply({ 
+                        content: `✅ **Proceso completado!**\n\n` +
+                                `📊 **Estadísticas:**\n` +
+                                `✅ Exitosos: **${success}**\n` +
+                                `❌ Fallidos: **${failed}**\n` +
+                                `👥 Total procesados: **${membersWithoutRole.size}**\n\n` +
+                                `Rol asignado: ${role}` 
+                    });
+                    
+                } catch (error) {
+                    console.error('Error al dar roles masivamente:', error);
+                    await interaction.editReply({ 
+                        content: '❌ Error al asignar roles. Verifica que el bot tenga permisos suficientes.' 
                     });
                 }
                 return;
