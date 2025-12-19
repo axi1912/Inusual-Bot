@@ -1734,7 +1734,7 @@ async function handleTicketCreationFromModal(interaction, type, formData) {
         
         // Determinar el nombre y tipo según el tipo de ticket
         if (type === 'asistencia') {
-            categoryId = '1436574895596245042'; // Categoría de Support
+            categoryId = '1436646285959757844'; // Categoría de Support
             channelName = `soporte-${interaction.user.username}`;
             ticketType = 'Asistencia General';
         } else if (type === 'compra') {
